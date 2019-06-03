@@ -1,0 +1,48 @@
+{
+  "name": "nikola-tesla-desktop-app",
+  "version": "0.0.1",
+  "description": "Open source and unoffocial desktop app to control tesla vehivles",
+  "author": "Geraldo Ramos",
+  "homepage": "https://github.com/geraldoramos/nikola",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/geraldoramos/nikola.git"
+  },
+  "license": "MIT",
+  "main": "main.js",
+  "scripts": {
+    "prod": "webpack --config webpack.build.config.js && electron --noDevServer .",
+    "dev": "webpack-dev-server --hot --host 0.0.0.0 --config=./webpack.dev.config.js",
+    "build": "webpack --config webpack.build.config.js",
+    "package": "webpack --config webpack.build.config.js",
+    "postpackage": "electron-packager ./ --out=./builds"
+  },
+  "devDependencies": {
+    "babel-core": "^6.24.1",
+    "babel-loader": "^7.1.2",
+    "babel-preset-react": "^6.24.1",
+    "babili-webpack-plugin": "^0.1.2",
+    "css-loader": "^0.28.1",
+    "electron": "^5.0.2",
+    "electron-packager": "^9.1.0",
+    "extract-text-webpack-plugin": "^3.0.1",
+    "file-loader": "^1.1.5",
+    "html-webpack-plugin": "^2.28.0",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "style-loader": "^0.19.0",
+    "webpack": "^3.6.0",
+    "webpack-dev-server": "^2.4.5"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.18",
+    "@fortawesome/free-solid-svg-icons": "^5.8.2",
+    "@fortawesome/react-fontawesome": "^0.1.4",
+    "axios": "^0.19.0",
+    "electron-context-menu": "^0.12.1",
+    "electron-positioner": "^4.1.0",
+    "electron-store": "^3.2.0",
+    "google-maps-react": "^2.0.2",
+    "teslajs": "^4.3.9"
+  }
+}
