@@ -54,9 +54,9 @@ function createWindow() {
   mainWindow.hide()
 
   // Show detached devtools (for development)
-    mainWindow.openDevTools({
-      mode: 'detach'
-    })
+    // mainWindow.openDevTools({
+    //   mode: 'detach'
+    // })
   
 
   // Main window behavior
@@ -68,44 +68,47 @@ function createWindow() {
   mainWindow.webContents.on('did-finish-load', () => {
 
     // start login and init sequence
-    const startLogin = async (login) => {
+    const startLogin = async (authToken, loginEmailPw) => {
       try {
-        await tesla.login(login)
-        store.set('login', login)
-        mainWindow.webContents.send('login', login)
+        if(!authToken){
+          authToken = await tesla.login(loginEmailPw)
+          store.set('authToken', authToken)
+        }
+        mainWindow.webContents.send('login', true)
+        // passing true to indicate initial login attempt and run immediatelly
         await teslaPoll(true)
         startPoller()
       } catch (error) {
         console.log(error)
-        store.delete('login')
+        store.delete('authToken')
         mainWindow.webContents.send('login-failed', JSON.stringify(error))
       }
     }
 
-    const currentLogin = store.get('login')
-    if (currentLogin) {
-      startLogin(currentLogin)
-    }
-
-    ipcMain.on('login-attempt', async (event, login) => {
-      startLogin(login)
+    ipcMain.on('login-attempt', async (event, loginEmailPw) => {
+      startLogin(false, loginEmailPw)
     })
 
     // get tesla Data
-    let isLogged;
+    let authToken;
     const teslaPoll = async (first) => {
-      isLogged = store.get('login')
-      if ((mainWindow.isVisible() || first) && isLogged.username && isLogged.password) {
+      authToken = store.get('authToken')
+
+      if ((mainWindow.isVisible() || first) && authToken) {
         try {
-          const login = await tesla.login(store.get('login'))
-          login.state !== 'online' ? await tesla.wakeUp(login.authToken, login.vehicleID) : null
-          const driveState = await tesla.driveState(login.authToken, login.vehicleID)
-          const chargeState = await tesla.chargeState(login.authToken, login.vehicleID)
-          const climateState = await tesla.climateState(login.authToken, login.vehicleID)
+          const vehicle = await tesla.vehicle(authToken)
+          if(vehicle.state !== 'online'){
+            await tesla.wakeUp(authToken, vehicle.vehicleID)
+            mainWindow.webContents.send('tesla-data', {vehicle})
+            return
+          }
+          const driveState = await tesla.driveState(authToken, vehicle.vehicleID)
+          const chargeState = await tesla.chargeState(authToken, vehicle.vehicleID)
+          const climateState = await tesla.climateState(authToken, vehicle.vehicleID)
           const allData = {
             driveState,
             chargeState,
-            login,
+            vehicle,
             climateState
           }
           mainWindow.webContents.send('tesla-data', allData)
@@ -128,7 +131,7 @@ function createWindow() {
         poller.poll();
       });
       // Initial start
-      if (store.get('login')) {
+      if (store.get('authToken')) {
         poller.poll();
       }
     }
@@ -143,11 +146,11 @@ function createWindow() {
           actions.separator(),
           {
             label: 'Logout',
-            enabled: store.get('login') ? true : false,
+            enabled: store.get('authToken') ? true : false,
             click() { 
-              store.delete('login')
-              poller ? poller.removeAllListeners(): null
-              mainWindow.webContents.send('login', null)
+              store.delete('authToken')
+              poller ? poller.removeAllListeners() : null
+              mainWindow.webContents.send('login', false)
             }
           },
           {
@@ -161,6 +164,11 @@ function createWindow() {
       });
     }
     setMenu()
+
+    const currentLogin = store.get('authToken')
+    if (currentLogin) {
+      startLogin(currentLogin, false)
+    }
 
   })
 

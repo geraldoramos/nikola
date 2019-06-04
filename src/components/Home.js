@@ -20,8 +20,8 @@ class Home extends React.Component {
 
       componentDidMount() {
 
-        ipcRenderer.on('login', function (event, loginData) {
-          if(loginData){
+        ipcRenderer.on('login', function (event, isLogged) {
+          if(isLogged){
             this.setState({auth:true})
             return
           }
@@ -44,18 +44,18 @@ class Home extends React.Component {
             firstData:true,
             batteryIcon: batteryLevelIcon(store.chargeState.battery_level),
             vehicle:{
-              model: store.login.model,
-              state: store.login.state
+              model: store.vehicle.model,
+              state: store.vehicle.state
             },
             status:{
-              batteryRange:store.chargeState.battery_range,
-              batteryLevel:store.chargeState.battery_level,
+              batteryRange: store.chargeState ? store.chargeState.battery_range: null,
+              batteryLevel: store.chargeState ? store.chargeState.battery_level: null,
               locked: true,
-              fan: store.climateState.is_climate_on,
-              speed: store.driveState.speed,
-              chargingState: store.chargeState.charging_state,
-              temperature: store.climateState.inside_temp,
-              location: {lat: store.driveState.latitude, lng: store.driveState.longitude},
+              fan: store.climateState ? store.climateState.is_climate_on : null,
+              speed: store.driveState? store.driveState.speed : null,
+              chargingState: store.chargeState ? store.chargeState.charging_state : null,
+              temperature: store.climateState ? store.climateState.inside_temp: null,
+              location: {lat: store.driveState?store.driveState.latitude:null, lng: store.driveState? store.driveState.longitude : null},
             }
           });
         }.bind(this));

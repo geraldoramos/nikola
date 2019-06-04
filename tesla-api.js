@@ -1,36 +1,38 @@
 const tjs = require('teslajs');
 
 module.exports = {
-    login: ({
-        username,
-        password
-    }) => {
+    login: ({ username, password}) => {
         return new Promise((resolve, reject) => {
             tjs.login(username, password, function (err, result) {
                 if (err) {
                     reject(err)
+                    return
                 }
-                const options = {
-                    authToken: result.authToken
-                };
-                tjs.vehicle(options, function (err, vehicle) {
-                    console.log('run login ' + new Date())
-                    if (err) {
-                        console.log(err)
-                        reject(err)
-                        return
-                    }
-                    resolve({
-                        authToken: result.authToken,
-                        vehicleID: vehicle.id_s,
-                        model: tjs.getModel(vehicle),
-                        state: vehicle.state
-                    })
-
-                });
+                resolve(result.authToken)
             })
         })
     },
+    vehicle: (authToken) => {
+        return new Promise((resolve, reject) => {
+        const options = {
+            authToken: authToken
+        };
+
+        tjs.vehicle(options, function (err, vehicle) {
+            console.log('run login ' + new Date())
+            if (err) {
+                console.log(err)
+                reject(err)
+                return
+            }
+            resolve({
+                authToken: authToken,
+                vehicleID: vehicle.id_s,
+                model: tjs.getModel(vehicle),
+                state: vehicle.state
+            })
+        });
+    })},
     wakeUp: (authToken, vehicleID) => {
         return new Promise((resolve, reject) => {
             const vehicleOptions = {
