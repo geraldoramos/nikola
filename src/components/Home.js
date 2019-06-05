@@ -65,9 +65,13 @@ class Home extends React.Component {
               batteryRange: store.chargeState ? store.chargeState.battery_range: null,
               batteryLevel: store.chargeState ? store.chargeState.battery_level: null,
               locked: store.vehicleState? store.vehicleState.locked : null,
+              odometer:store.vehicleState? store.vehicleState.odometer : null,
+              sentryMode:store.vehicleState? store.vehicleState.sentry_mode : null,
+              valetMode:store.vehicleState? store.vehicleState.valet_mode : null,
               climate: store.climateState ? store.climateState.is_climate_on : null,
               speed: store.driveState? store.driveState.speed : null,
               chargingState: store.chargeState ? store.chargeState.charging_state : null,
+              timetoFullCharge:store.chargeState ? store.chargeState.time_to_full_charge : null,
               temperature: store.climateState ? store.climateState.inside_temp: null,
               location: {lat: store.driveState?store.driveState.latitude:null, lng: store.driveState? store.driveState.longitude : null},
             }

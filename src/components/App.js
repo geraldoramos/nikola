@@ -8,6 +8,7 @@ import { faTemperatureLow, faTachometerAlt, faBed, faPowerOff } from '@fortaweso
 import Maps from './Maps'
 const {ipcRenderer, remote} = window.require('electron')
 import Actions from './Actions'
+import ReactTooltip from 'react-tooltip'
 
 class App extends React.Component {
 
@@ -64,16 +65,25 @@ class App extends React.Component {
           <div className="title">
             Tesla {this.props.vehicle.model}
           </div>
-          
-          <img src={modelImage(this.props.vehicle.model)} width="100" height="40"/>
+          <ReactTooltip place="bottom" id='overview'>
+          <div className="tooltip">Charging State: <span>{this.props.status ? this.props.status.chargingState : null }</span></div>
+          <div className="tooltip">Battery Level: <span>{this.props.status ? `${this.props.status.batteryLevel}%` : null }</span></div>
+          <div className="tooltip">Time to full charge: <span>{this.props.status ? `${this.props.status.timetoFullCharge} hours` : null }</span></div>
+          <div className="tooltip">Door: <span>{this.props.status ? this.props.status.locked ? 'Locked' : 'Unlocked': null }</span></div>
+          <div className="tooltip">Climate: <span>{this.props.status ? this.props.status.climate ? 'ON' : 'OFF': null }</span></div>
+          <div className="tooltip">Odometer: <span>{this.props.status ? this.props.status.odometer : null }</span></div>
+          <div className="tooltip">Sentry Mode: <span>{this.props.status ? this.props.status.sentryMode ? 'ON' : 'OFF': null }</span></div>
+          <div className="tooltip">Valet Mode: <span>{this.props.status ? this.props.status.valetMode ? 'ON' : 'OFF': null }</span></div>
+          </ReactTooltip>
+          <a data-tip data-for='overview'><img src={modelImage(this.props.vehicle.model)} width="100" height="40"/></a>
           </div>
           <div className="status">
           <div>
             <span className="description"><FontAwesomeIcon icon={faTachometerAlt} size="1x" color="#1BC47D"/><strong> {!this.props.status.speed ? 'Stopped' : `${this.props.status.speed} mph`} </strong></span>
               </div>
             <div>
-            <span className="description"><FontAwesomeIcon icon={this.props.batteryIcon.type} size="1x" color={this.props.batteryIcon.color}/><strong> {this.props.status.batteryRange} 
-            </strong><span className="note"> MI ({this.props.status.chargingState})</span></span>
+            <span className="description"><FontAwesomeIcon name={this.props.status.chargingState} icon={this.props.batteryIcon.type} size="1x" color={this.props.batteryIcon.color}/><strong> {this.props.status.batteryRange} 
+            </strong><span className="note"> MI</span></span>
               </div>
             <div>
             <span className="description"><FontAwesomeIcon icon={faTemperatureLow} size="1x" color="#1BC47D"/><strong> {this.props.status.temperature} </strong><span className="note"> F</span></span>

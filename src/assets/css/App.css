@@ -3,7 +3,7 @@
   --background-color: #121212;
   --text-color: #dbdbdb;
   --window-border-radius: 6px;
-  --font-size: 12px;
+  --font-size: 14px;
 }
 
 a{
@@ -213,4 +213,15 @@ hr{
 .exclamation{
   margin-top: 20px;
   text-align: center;
+}
+
+.tooltip{
+  color: rgb(124, 124, 124);
+  font-size: calc(var(--font-size) - 3px);
+  text-align: left;
+}
+
+.tooltip > span {
+  opacity: 1;
+  color: white;
 }

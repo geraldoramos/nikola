@@ -8,6 +8,13 @@ const Store = require('electron-store');
 const store = new Store();
 const Poller = require('./poller');
 const contextMenu = require('electron-context-menu');
+const {autoUpdater} = require("electron-updater");
+const log = require('electron-log');
+
+// Logging
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+log.info('Nikola App starting...');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -20,6 +27,13 @@ if (process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) |
 }
 
 function createWindow() {
+  // start autoUpdater
+  autoUpdater.checkForUpdatesAndNotify();
+
+//   autoUpdater.on('update-downloaded', (info) => {
+//   autoUpdater.quitAndInstall();  
+// })
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 300,

@@ -59,7 +59,7 @@ class Login extends React.Component {
                               <input required type="password" name="password" value={this.state.password} onChange={this.handleChange}  className="form-control" placeholder="Enter Password"/>
                            </div>
                            <div className="col-md-12 text-center ">
-                           <p className="disclaimer text-center">Account details are stored locally and are not sent to anywhere besides Tesla servers, directly. You can see the code <a href="h">here</a></p>
+                           <p className="disclaimer text-center">Account token is stored locally and is not sent anywhere besides Tesla servers, directly.</p>
                               <button type="submit" className=" btn btn-block mybtn btn-primary tx-tfm">Login</button>
                            </div>
                         </form>
