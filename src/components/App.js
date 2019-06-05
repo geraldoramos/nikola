@@ -2,14 +2,12 @@ import '../assets/css/Photon.css';
 import '../assets/css/App.css';
 
 import modelImage from  './helpers/model-image'
-import unlock from '../assets/img/unlock.svg'
-import lock from '../assets/img/lock.svg'
-import nofan from '../assets/img/nofan.svg'
-import fan from '../assets/img/fan.svg'
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTemperatureLow, faTachometerAlt, faBed } from '@fortawesome/free-solid-svg-icons'
+import { faTemperatureLow, faTachometerAlt, faBed, faPowerOff } from '@fortawesome/free-solid-svg-icons'
 import Maps from './Maps'
+const {ipcRenderer, remote} = window.require('electron')
+import Actions from './Actions'
 
 class App extends React.Component {
 
@@ -20,17 +18,17 @@ class App extends React.Component {
   }
 
   handleLockClick(event) {
-    console.log('olar')
+    ipcRenderer.send('door', event.target.name)
   }
 
   handleFanClick(event) {
-    console.log('olar')
+    ipcRenderer.send('climate', event.target.name)
   }
 
 
   render() {
 
-    if(this.props.vehicle && this.props.vehicle.state !== 'online'){
+    if(this.props.vehicle && this.props.vehicle.state === 'asleep'){
         return (
         <div className="container-sleep">
             <div className="exclamation"><FontAwesomeIcon icon={faBed} size="3x" color="#cc0001"/></div>
@@ -40,6 +38,17 @@ class App extends React.Component {
           </div>
         )
     }
+
+    if(this.props.vehicle && this.props.vehicle.state === 'offline'){
+      return (
+      <div className="container-sleep">
+          <div className="exclamation"><FontAwesomeIcon icon={faPowerOff} size="3x" color="#cc0001"/></div>
+        <div className="summary">Vehicle is Offline</div>
+        <center><div className="description">Internet connection in the car is down</div></center>
+        <div className="signal"/>
+        </div>
+      )
+  }
 
     if(this.props.loading){
       return (
@@ -60,7 +69,7 @@ class App extends React.Component {
           </div>
           <div className="status">
           <div>
-            <span className="description"><FontAwesomeIcon icon={faTachometerAlt} size="1x" color="#1BC47D"/><strong> {!this.props.status.speed ? 'Parked' : this.props.status.speed} </strong></span>
+            <span className="description"><FontAwesomeIcon icon={faTachometerAlt} size="1x" color="#1BC47D"/><strong> {!this.props.status.speed ? 'Stopped' : `${this.props.status.speed} mph`} </strong></span>
               </div>
             <div>
             <span className="description"><FontAwesomeIcon icon={this.props.batteryIcon.type} size="1x" color={this.props.batteryIcon.color}/><strong> {this.props.status.batteryRange} 
@@ -73,9 +82,10 @@ class App extends React.Component {
             <hr/>
             <div className="controls">
             <div className="summary">Controls</div>
+            <div className="action-error">{this.props.actionError? 'Action Failed': null}</div>
             <div className="controls-items">
-            <div onClick={this.handleLockClick}><img src={this.props.status.locked ? lock : unlock}/></div>
-            <div onClick={this.handleLockClick}><img src={this.props.status.fan ? fan : nofan}/></div>
+            <Actions type='door' loading={this.props.actionLoading} handle={this.handleLockClick} status={this.props.status.locked} />
+            <Actions type='climate' loading={this.props.actionLoading} handle={this.handleFanClick} status={this.props.status.climate} />
             </div>
             </div>
             <hr/>

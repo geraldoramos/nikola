@@ -104,6 +104,15 @@ body {
   font-weight: 300;
 }
 
+
+.action-error {
+  text-transform: uppercase;
+  color: #cc0001;
+  font-size: calc(var(--font-size) - 3px);
+  font-weight: 300;
+  text-align: center;
+}
+
 .disclaimer {
   margin: 15px 5px 15px 5px;
   color: rgb(124, 124, 124);

@@ -3,7 +3,7 @@ const tjs = require('teslajs');
 module.exports = {
     login: ({ username, password}) => {
         return new Promise((resolve, reject) => {
-            tjs.login(username, password, function (err, result) {
+            tjs.login(username, password, function (err, result) {                
                 if (err) {
                     reject(err)
                     return
@@ -62,6 +62,20 @@ module.exports = {
             });
         })
     },
+    vehicleState: (authToken, vehicleID) => {
+        return new Promise((resolve, reject) => {
+            const vehicleOptions = {
+                authToken,
+                vehicleID
+            };
+            tjs.vehicleState(vehicleOptions, function (err, data) {
+                if (err) {
+                    reject(err)
+                }
+                resolve(data)
+            });
+        })
+    },
     chargeState: (authToken, vehicleID) => {
         return new Promise((resolve, reject) => {
             const vehicleOptions = {
@@ -91,5 +105,66 @@ module.exports = {
                 resolve(data)
             });
         })
-    }
+    },
+    lockDoor: (authToken, vehicleID) => {
+        return new Promise((resolve, reject) => {
+            const vehicleOptions = {
+                authToken,
+                vehicleID
+            };
+            tjs.doorLock(vehicleOptions, function (err, data) {
+                if (err) {
+                    console.log(err)
+                    reject(err)
+                }
+                resolve(data)
+            });
+        })
+    },
+    unLockDoor: (authToken, vehicleID) => {
+        return new Promise((resolve, reject) => {
+            const vehicleOptions = {
+                authToken,
+                vehicleID
+            };
+            tjs.doorUnlock(vehicleOptions, function (err, data) {
+                if (err) {
+                    console.log(err)
+                    reject(err)
+                }
+                resolve(data)
+            });
+        })
+    },
+    climateStart: (authToken, vehicleID) => {
+        return new Promise((resolve, reject) => {
+            const vehicleOptions = {
+                authToken,
+                vehicleID
+            };
+            tjs.climateStart(vehicleOptions, function (err, data) {
+                if (err) {
+                    console.log(err)
+                    reject(err)
+                }
+                resolve(data)
+            });
+        })
+    },
+    climateStop: (authToken, vehicleID) => {
+        return new Promise((resolve, reject) => {
+            const vehicleOptions = {
+                authToken,
+                vehicleID
+            };
+            tjs.climateStop(vehicleOptions, function (err, data) {
+                if (err) {
+                    console.log(err)
+                    reject(err)
+                }
+                resolve(data)
+            });
+        })
+    },
+
 }

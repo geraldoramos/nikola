@@ -54,9 +54,9 @@ function createWindow() {
   mainWindow.hide()
 
   // Show detached devtools (for development)
-    // mainWindow.openDevTools({
-    //   mode: 'detach'
-    // })
+    mainWindow.openDevTools({
+      mode: 'detach'
+    })
   
 
   // Main window behavior
@@ -76,7 +76,7 @@ function createWindow() {
         }
         mainWindow.webContents.send('login', true)
         // passing true to indicate initial login attempt and run immediatelly
-        await teslaPoll(true)
+        await getTeslaData(true)
         startPoller()
       } catch (error) {
         console.log(error)
@@ -85,18 +85,15 @@ function createWindow() {
       }
     }
 
-    ipcMain.on('login-attempt', async (event, loginEmailPw) => {
-      startLogin(false, loginEmailPw)
-    })
-
     // get tesla Data
     let authToken;
-    const teslaPoll = async (first) => {
+    const getTeslaData = async (first) => {
       authToken = store.get('authToken')
 
       if ((mainWindow.isVisible() || first) && authToken) {
         try {
           const vehicle = await tesla.vehicle(authToken)
+          store.set('vehicleId', vehicle.vehicleID)
           if(vehicle.state !== 'online'){
             await tesla.wakeUp(authToken, vehicle.vehicleID)
             mainWindow.webContents.send('tesla-data', {vehicle})
@@ -105,11 +102,13 @@ function createWindow() {
           const driveState = await tesla.driveState(authToken, vehicle.vehicleID)
           const chargeState = await tesla.chargeState(authToken, vehicle.vehicleID)
           const climateState = await tesla.climateState(authToken, vehicle.vehicleID)
+          const vehicleState = await tesla.vehicleState(authToken, vehicle.vehicleID)
           const allData = {
             driveState,
             chargeState,
             vehicle,
-            climateState
+            climateState,
+            vehicleState
           }
           mainWindow.webContents.send('tesla-data', allData)
           mainWindow.webContents.send('tesla-data-error', false)
@@ -127,7 +126,7 @@ function createWindow() {
       poller = new Poller(10000);
       // Wait till the timeout sent our event to the EventEmitter
       poller.onPoll(async () => {
-        await teslaPoll()
+        await getTeslaData()
         poller.poll();
       });
       // Initial start
@@ -135,6 +134,54 @@ function createWindow() {
         poller.poll();
       }
     }
+
+    // Actions
+    ipcMain.on('login-attempt', async (event, loginEmailPw) => {
+      startLogin(false, loginEmailPw)
+    })
+
+    async function wait(ms) {
+      return new Promise(resolve => {
+        setTimeout(resolve, ms);
+      });
+    }
+
+    ipcMain.on('door', async (event, action) => {
+      mainWindow.webContents.send('action-loading', action)
+      try {
+        if(action === 'unlock-door'){
+          await tesla.unLockDoor(store.get('authToken'), store.get('vehicleId'))
+        } else{
+          await tesla.lockDoor(store.get('authToken'), store.get('vehicleId'))
+        }
+        await getTeslaData()
+        mainWindow.webContents.send('action-loading', null)
+      } catch (error) {
+        console.log(error)
+        mainWindow.webContents.send('action-error', `Error with ${action}`)
+        mainWindow.webContents.send('action-loading', null)
+      }    
+    })
+
+    ipcMain.on('climate', async (event, action) => {
+      mainWindow.webContents.send('action-loading', action)
+      try {
+        if(action === 'climate-on'){
+          console.log('triggered climate start')
+          await tesla.climateStart(store.get('authToken'), store.get('vehicleId'))
+        } else{
+          console.log('triggered climate stop')
+          await tesla.climateStop(store.get('authToken'), store.get('vehicleId'))
+        }
+        await getTeslaData()
+        mainWindow.webContents.send('action-loading', null)
+      } catch (error) {
+        console.log(error)
+        mainWindow.webContents.send('action-error', `Error with ${action}`)
+        mainWindow.webContents.send('action-loading', null)
+      }    
+    })
+
 
     const setMenu = () => {
       contextMenu({
@@ -149,6 +196,7 @@ function createWindow() {
             enabled: store.get('authToken') ? true : false,
             click() { 
               store.delete('authToken')
+              store.delete('vehicleId')
               poller ? poller.removeAllListeners() : null
               mainWindow.webContents.send('login', false)
             }

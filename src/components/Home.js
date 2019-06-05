@@ -13,8 +13,11 @@ class Home extends React.Component {
         this.state = {
           firstData: false,
           loading: true,
+          actionLoading: null,
           error: false,
+          actionError: null,
           auth:false,
+          
         }
       }
 
@@ -27,6 +30,17 @@ class Home extends React.Component {
           }
           this.setState({auth:false})
 
+        }.bind(this))
+
+        ipcRenderer.on('action-loading', function (event, actionLoading) {
+            this.setState({actionLoading})
+        }.bind(this))
+
+        ipcRenderer.on('action-error', function (event, actionError) {
+          this.setState({actionError})
+          setTimeout(() => {
+            this.setState({actionError:null})
+          }, 3000);
         }.bind(this))
 
         ipcRenderer.on('tesla-data-error', function (event,store) {
@@ -42,7 +56,7 @@ class Home extends React.Component {
           this.setState({
             loading:false,
             firstData:true,
-            batteryIcon: batteryLevelIcon(store.chargeState.battery_level),
+            batteryIcon: batteryLevelIcon(store.chargeState ? store.chargeState.battery_level : 'default'),
             vehicle:{
               model: store.vehicle.model,
               state: store.vehicle.state
@@ -50,8 +64,8 @@ class Home extends React.Component {
             status:{
               batteryRange: store.chargeState ? store.chargeState.battery_range: null,
               batteryLevel: store.chargeState ? store.chargeState.battery_level: null,
-              locked: true,
-              fan: store.climateState ? store.climateState.is_climate_on : null,
+              locked: store.vehicleState.locked,
+              climate: store.climateState ? store.climateState.is_climate_on : null,
               speed: store.driveState? store.driveState.speed : null,
               chargingState: store.chargeState ? store.chargeState.charging_state : null,
               temperature: store.climateState ? store.climateState.inside_temp: null,
