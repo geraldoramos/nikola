@@ -54,9 +54,12 @@ function createWindow() {
   mainWindow.hide()
 
   // Show detached devtools (for development)
+  if(dev && process.argv.indexOf('--noDevServer') === -1){
     mainWindow.openDevTools({
       mode: 'detach'
     })
+  }
+
   
 
   // Main window behavior

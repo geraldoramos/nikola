@@ -64,7 +64,7 @@ class Home extends React.Component {
             status:{
               batteryRange: store.chargeState ? store.chargeState.battery_range: null,
               batteryLevel: store.chargeState ? store.chargeState.battery_level: null,
-              locked: store.vehicleState.locked,
+              locked: store.vehicleState? store.vehicleState.locked : null,
               climate: store.climateState ? store.climateState.is_climate_on : null,
               speed: store.driveState? store.driveState.speed : null,
               chargingState: store.chargeState ? store.chargeState.charging_state : null,

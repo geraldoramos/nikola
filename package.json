@@ -8,14 +8,37 @@
     "type": "git",
     "url": "https://github.com/geraldoramos/nikola.git"
   },
+  "build": {
+    "directories": {
+      "output": "packaged"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "geraldoramos",
+        "repo": "nikola"
+      }
+    ],
+    "appId": "com.github.geraldoramos.nikola",
+    "mac": {
+      "category": "public.app-category.utilities",
+      "icon": "icons/icon.icns",
+      "target": [
+        "zip",
+        "dmg"
+      ]
+    },
+    "dmg": {
+      "background": "icons/background.png"
+    }
+  },
   "license": "MIT",
   "main": "main.js",
   "scripts": {
     "prod": "webpack --config webpack.build.config.js && electron --noDevServer .",
     "dev": "webpack-dev-server --hot --host 0.0.0.0 --config=./webpack.dev.config.js",
-    "build": "webpack --config webpack.build.config.js",
-    "package": "webpack --config webpack.build.config.js",
-    "postpackage": "electron-packager ./ --out=./builds"
+    "build-ui": "webpack --config webpack.build.config.js",
+    "build": "yarn build-ui && build -m"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
