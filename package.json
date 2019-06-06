@@ -26,10 +26,7 @@
       "publish": [
         "github"
       ],
-      "target": [
-        "zip",
-        "dmg"
-      ]
+      "target":"dmg"
     },
     "dmg": {
       "background": "icons/background.png"

@@ -245,6 +245,10 @@ function createWindow() {
       startLogin(currentLogin, false)
     }
 
+    mainWindow.on('show', async() => {
+      await getTeslaData()
+    })
+
   })
 
   // position window to the tray area
