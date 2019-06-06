@@ -237,16 +237,7 @@ function createWindow() {
             click() { 
               app.quit()
             }
-          },
-          actions.separator(),
-          {
-            label: 'Open DevTools',
-            click() { 
-              mainWindow.openDevTools({
-                mode: 'detach'
-              })
-            }
-          },
+          }
         ]
       });
     }
