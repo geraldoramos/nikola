@@ -71,10 +71,10 @@ function createWindow() {
   // Don't show the app in the dock
   if (process.platform === 'darwin') {
     app.dock.hide()
+      // hide window initially
+    mainWindow.hide()
   }
- 
-  // hide window initially
-  mainWindow.hide()
+
 
   // Show detached devtools (for development)
   if(dev && process.argv.indexOf('--noDevServer') === -1){
