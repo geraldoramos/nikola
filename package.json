@@ -48,7 +48,7 @@
     "prod": "webpack --config webpack.build.config.js && electron --noDevServer .",
     "dev": "webpack-dev-server --hot --host 0.0.0.0 --config=./webpack.dev.config.js",
     "build-ui": "webpack --config webpack.build.config.js",
-    "build": "yarn build-ui && build -w",
+    "build": "yarn build-ui && build -w -m",
     "publish": "yarn build-ui && build -m -w -p always"
   },
   "devDependencies": {

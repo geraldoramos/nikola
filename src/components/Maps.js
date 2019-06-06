@@ -8,6 +8,7 @@ const mapStyles = {
   }
 
 export class MapContainer extends Component {
+  
   render() {
     return (
       <Map containerStyle={{position:'static'}} initialCenter={this.props.center} google={this.props.google} zoom={16} style={mapStyles}
@@ -194,5 +195,5 @@ icon={{
 }
 
 export default GoogleApiWrapper({
-  apiKey: process.env.GOOGLE_MAPS
+  apiKey: process.env.GOOGLE_MAPS || 'AIzaSyCGoH7CvDusHYHctKPeCYjMi3oj-xp0ZVA'
 })(MapContainer)
