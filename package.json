@@ -1,7 +1,7 @@
 {
   "name": "Nikola",
-  "version": "0.1.1",
-  "description": "Open source and unoffocial desktop app to control tesla vehicles",
+  "version": "0.1.2",
+  "description": "Open source and unoffocial cross-platform desktop app to control tesla vehicles",
   "author": "Geraldo Ramos",
   "homepage": "https://github.com/geraldoramos/nikola",
   "repository": {
@@ -48,7 +48,7 @@
     "prod": "webpack --config webpack.build.config.js && electron --noDevServer .",
     "dev": "webpack-dev-server --hot --host 0.0.0.0 --config=./webpack.dev.config.js",
     "build-ui": "webpack --config webpack.build.config.js",
-    "build": "yarn build-ui && build -w",
+    "build": "yarn build-ui && build -m",
     "publish": "yarn build-ui && build -m -w -p always"
   },
   "devDependencies": {
@@ -60,7 +60,7 @@
     "electron": "^5.0.2",
     "electron-builder": "^20.41.0",
     "electron-packager": "^13.1.1",
-    "extract-text-webpack-plugin": "^3.0.2",
+    "extract-text-webpack-plugin": "v4.0.0-alpha.0",
     "file-loader": "^4.0.0",
     "html-webpack-plugin": "^3.2.0",
     "js-yaml": ">=3.13.1",
