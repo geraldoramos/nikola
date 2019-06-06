@@ -9,12 +9,29 @@
 
 Download [last release](https://github.com/geraldoramos/nikola/releases/latest)
 
+PS: Tesla Auth token is stored locally uppon login and is not sent anywhere besides Tesla servers. To remove the token from your computer, just logout.
+
 ## Features
 
+* Authentication direc
 * Real-time location tracking
 * Track of several statuses (Speed, battery, temperature, etc...)
 * Remote locking/unlocking
 * Remote climate control
 * Auto-update
 
+
+## Contributing
+
+1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your local device
+2. Install the dependencies: `yarn`
+3. Build the code, start the app, and watch for changes: `GOOGLE_MAPS=YOURKEY yarn run dev`
+
+To make sure that your code works in the finished app, you can generate the binary (make sure to include your google maps key in the `../components/Maps.js` file.
+
+```
+$ yarn run build
+```
+
+After that, you'll see the binaries in the `packed` folder.
 
