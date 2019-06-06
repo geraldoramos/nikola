@@ -216,7 +216,7 @@ function createWindow() {
       contextMenu({
         menu: actions => [
           {
-            label: `Nikola App ${app.getVersion()}`,
+            label: `Nikola ${app.getVersion()}`,
             click(){shell.openExternal('https://github.com/geraldoramos/nikola')}
           },
           actions.separator(),

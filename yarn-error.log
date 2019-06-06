@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/Cellar/node/11.1.0/bin/node /usr/local/Cellar/yarn/1.12.1/libexec/bin/yarn.js build
+  /usr/local/Cellar/node/11.1.0/bin/node /usr/local/Cellar/yarn/1.12.1/libexec/bin/yarn.js publish
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin
@@ -14,12 +14,17 @@ Platform:
   darwin x64
 
 Trace: 
-  SyntaxError: /Users/geraldoramos/local_repos/tesla-app/package.json: Unexpected end of JSON input
-      at JSON.parse (<anonymous>)
-      at /usr/local/Cellar/yarn/1.12.1/libexec/lib/cli.js:1166:59
-      at Generator.next (<anonymous>)
-      at step (/usr/local/Cellar/yarn/1.12.1/libexec/lib/cli.js:92:30)
-      at /usr/local/Cellar/yarn/1.12.1/libexec/lib/cli.js:103:13
+  Error: canceled
+      at Interface.<anonymous> (/usr/local/Cellar/yarn/1.12.1/libexec/lib/cli.js:120807:13)
+      at Interface.emit (events.js:182:13)
+      at Interface._ttyWrite (readline.js:793:16)
+      at ReadStream.onkeypress (readline.js:178:10)
+      at ReadStream.emit (events.js:182:13)
+      at emitKeys (internal/readline.js:424:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1030:36)
+      at ReadStream.emit (events.js:182:13)
+      at addChunk (_stream_readable.js:283:12)
 
 npm manifest: 
   {
@@ -47,6 +52,9 @@ npm manifest:
       "mac": {
         "category": "public.app-category.utilities",
         "icon": "icons/icon.icns",
+        "publish": [
+          "github"
+        ],
         "target": [
           "zip",
           "dmg"
@@ -56,16 +64,21 @@ npm manifest:
         "background": "icons/background.png"
       },
       "win": {
-        "target": "squirrel",
-        "icon": "icons/icon.ico"
-      },
+        "target": "zip",
+        "icon": "icons/icon.ico",
+        "publish": [
+          "github"
+        ]
+      }
+    },
     "license": "MIT",
     "main": "main.js",
     "scripts": {
       "prod": "webpack --config webpack.build.config.js && electron --noDevServer .",
       "dev": "webpack-dev-server --hot --host 0.0.0.0 --config=./webpack.dev.config.js",
       "build-ui": "webpack --config webpack.build.config.js",
-      "build": "yarn build-ui && build -w"
+      "build": "yarn build-ui && build -w",
+      "publish": "yarn build-ui && build -p always"
     },
     "devDependencies": {
       "babel-core": "^6.24.1",
@@ -89,7 +102,6 @@ npm manifest:
       "@fortawesome/fontawesome-svg-core": "^1.2.18",
       "@fortawesome/free-solid-svg-icons": "^5.8.2",
       "@fortawesome/react-fontawesome": "^0.1.4",
-      "axios": "^0.19.0",
       "electron-context-menu": "^0.12.1",
       "electron-log": "^3.0.6",
       "electron-positioner": "^4.1.0",
@@ -2172,6 +2184,11 @@ Lockfile:
     version "6.2.0"
     resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-6.2.0.tgz#941c0410535d942c8becf28d3f357dbd9d476064"
     integrity sha512-HygQCKUBSFl8wKQZBSemMywRWcEDNidvNbjGVyZu3nbZ8qq9ubiPoGLMdRDpfSrpkkm9BXYFkpKxxFX38o/76w==
+  
+  dotenv@^8.0.0:
+    version "8.0.0"
+    resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.0.0.tgz#ed310c165b4e8a97bb745b0a9d99c31bda566440"
+    integrity sha512-30xVGqjLjiUOArT4+M5q9sYdvuR4riM6yK9wMcas9Vbp6zZa+ocC9dp6QoftuhTPhFAiLK/0C5Ni2nou/Bk8lg==
   
   duplexer3@^0.1.4:
     version "0.1.4"

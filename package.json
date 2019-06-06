@@ -1,5 +1,5 @@
 {
-  "name": "nikola",
+  "name": "Nikola",
   "version": "0.0.2",
   "description": "Open source and unoffocial desktop app to control tesla vehicles",
   "author": "Geraldo Ramos",
@@ -23,6 +23,9 @@
     "mac": {
       "category": "public.app-category.utilities",
       "icon": "icons/icon.icns",
+      "publish": [
+        "github"
+      ],
       "target": [
         "zip",
         "dmg"
@@ -33,7 +36,10 @@
     },
     "win": {
       "target": "zip",
-      "icon": "icons/icon.ico"
+      "icon": "icons/icon.ico",
+      "publish": [
+        "github"
+      ]
     }
   },
   "license": "MIT",
@@ -42,7 +48,8 @@
     "prod": "webpack --config webpack.build.config.js && electron --noDevServer .",
     "dev": "webpack-dev-server --hot --host 0.0.0.0 --config=./webpack.dev.config.js",
     "build-ui": "webpack --config webpack.build.config.js",
-    "build": "yarn build-ui && build -w"
+    "build": "yarn build-ui && build -w",
+    "publish": "yarn build-ui && build -m -w -p always"
   },
   "devDependencies": {
     "babel-core": "^6.24.1",
@@ -66,7 +73,6 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.18",
     "@fortawesome/free-solid-svg-icons": "^5.8.2",
     "@fortawesome/react-fontawesome": "^0.1.4",
-    "axios": "^0.19.0",
     "electron-context-menu": "^0.12.1",
     "electron-log": "^3.0.6",
     "electron-positioner": "^4.1.0",

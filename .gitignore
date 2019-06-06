@@ -5,3 +5,4 @@ dist/
 builds/
 packaged
 dist
+.env
