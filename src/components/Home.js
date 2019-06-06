@@ -27,7 +27,7 @@ class Home extends React.Component {
         ipcRenderer.on('platform', function (event, platform) {
           if(platform==='win32'){
             document.querySelector('.header-arrow').style = 'display: none'
-            document.querySelector('body').style = '-webkit-app-region: drag'
+            document.querySelector('.toolbar').style = '-webkit-app-region: drag;min-height: 10px'
           }
         })
 

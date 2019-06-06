@@ -68,7 +68,7 @@ class App extends React.Component {
           <div className="tooltip">Time to full charge: <span>{this.props.status ? `${this.props.status.timetoFullCharge} hours` : null }</span></div>
           <div className="tooltip">Door: <span>{this.props.status ? this.props.status.locked ? 'Locked' : 'Unlocked': null }</span></div>
           <div className="tooltip">Climate: <span>{this.props.status ? this.props.status.climate ? 'ON' : 'OFF': null }</span></div>
-          <div className="tooltip">Odometer: <span>{this.props.status ? this.props.status.odometer : null }</span></div>
+          <div className="tooltip">Odometer: <span>{this.props.status ? `${Math.trunc(this.props.status.odometer)} miles` : null }</span></div>
           <div className="tooltip">Sentry Mode: <span>{this.props.status ? this.props.status.sentryMode ? 'ON' : 'OFF': null }</span></div>
           <div className="tooltip">Valet Mode: <span>{this.props.status ? this.props.status.valetMode ? 'ON' : 'OFF': null }</span></div>
           </ReactTooltip>
