@@ -28,10 +28,6 @@ if (process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) |
 
 function createWindow() {
 
-  // start autoUpdater
-  autoUpdater.checkForUpdatesAndNotify();
-
-
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 300,
@@ -92,6 +88,9 @@ function createWindow() {
 
   // Tesla data Pooling
   mainWindow.webContents.on('did-finish-load', () => {
+
+  autoUpdater.checkForUpdatesAndNotify();
+
     mainWindow.webContents.send('platform', process.platform)
 
     // start login and init sequence
