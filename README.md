@@ -3,7 +3,7 @@
   <a href="https://github.com/geraldoramos/nikola/issues"><img src=https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat></a>
 <a target="_blank" href="https://gitter.im/nikola/Lobby"><img src="https://badges.gitter.im/gitterHQ/gitter.png"></a>
   <p align="center"><strong>⚡Unofficial cross-platform desktop app to monitor and control Tesla vehicles, powered by Electron & React</strong><p>
-<img src="https://firebasestorage.googleapis.com/v0/b/nikola-ffeaf.appspot.com/o/newbg.png?alt=media&token=57f736b0-59e7-44b4-968f-915e44e5c4f8">
+<img src="https://firebasestorage.googleapis.com/v0/b/nikola-ffeaf.appspot.com/o/newbg.png?alt=media&token=7951c95f-8f23-470d-beae-33858d89b08f">
 
 ## Get Nikola
 
