@@ -1,6 +1,6 @@
 {
   "name": "Nikola",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Open source and unoffocial cross-platform desktop app to control tesla vehicles",
   "author": "Geraldo Ramos",
   "homepage": "https://github.com/geraldoramos/nikola",
@@ -26,7 +26,7 @@
       "publish": [
         "github"
       ],
-      "target":"dmg"
+      "target":["dmg", "zip"]
     },
     "dmg": {
       "background": "icons/background.png"
