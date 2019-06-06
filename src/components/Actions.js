@@ -1,5 +1,3 @@
-import '../assets/css/Photon.css';
-import '../assets/css/App.css';
 import React, { Component } from 'react';
 import unlock from '../assets/img/unlock.svg'
 import lock from '../assets/img/lock.svg'

@@ -54,16 +54,27 @@ function createWindow() {
 
   // tray stuff
   let tray;
-  if (systemPreferences.isDarkMode()) {
-    tray = new Tray(path.join(__dirname, 'src', 'assets', 'img', 'dark.png'))
-  } else {
-    tray = new Tray(path.join(__dirname, 'src', 'assets', 'img', 'white.png'))
+  
+  if (process.platform === 'darwin') {
+    if (systemPreferences.isDarkMode()) {
+      tray = new Tray(path.join(__dirname, 'src', 'assets', 'img', 'dark.png'))
+    } else {
+      tray = new Tray(path.join(__dirname, 'src', 'assets', 'img', 'white.png'))
+    }
   }
+
+  if (process.platform === 'win32') {
+      tray = new Tray(path.join(__dirname, 'src', 'assets', 'img', 'win_tray.png'))
+  }
+
 
   tray.setToolTip('Nikola App')
 
-  // Don't show the app in the doc
-  app.dock.hide()
+  // Don't show the app in the dock
+  if (process.platform === 'darwin') {
+    app.dock.hide()
+  }
+ 
   // hide window initially
   mainWindow.hide()
 
@@ -83,6 +94,7 @@ function createWindow() {
 
   // Tesla data Pooling
   mainWindow.webContents.on('did-finish-load', () => {
+    mainWindow.webContents.send('platform', process.platform)
 
     // start login and init sequence
     const startLogin = async (authToken, loginEmailPw) => {
@@ -254,7 +266,7 @@ function createWindow() {
   if (dev && process.argv.indexOf('--noDevServer') === -1) {
     indexPath = url.format({
       protocol: 'http:',
-      host: 'localhost:8080',
+      host: `localhost:8080?platform=${process.platform}`,
       pathname: 'index.html',
       slashes: true
     });

@@ -1,5 +1,3 @@
-import '../assets/css/Photon.css';
-import '../assets/css/App.css';
 import React, { Component } from 'react';
 const {ipcRenderer, remote} = window.require('electron')
 import logo from '../assets/img/logo.svg'

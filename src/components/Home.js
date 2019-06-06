@@ -2,6 +2,7 @@ import '../assets/css/Photon.css';
 import '../assets/css/App.css';
 import React, { Component } from 'react';
 const {ipcRenderer, remote} = window.require('electron')
+
 import batteryLevelIcon from './helpers/battery-level-icon'
 import App from './App';
 import Login from './Login';
@@ -22,6 +23,13 @@ class Home extends React.Component {
       }
 
       componentDidMount() {
+
+        ipcRenderer.on('platform', function (event, platform) {
+          if(platform==='win32'){
+            document.querySelector('.header-arrow').style = 'display: none'
+            document.querySelector('body').style = '-webkit-app-region: drag'
+          }
+        })
 
         ipcRenderer.on('login', function (event, isLogged) {
           if(isLogged){

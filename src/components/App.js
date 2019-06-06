@@ -1,6 +1,3 @@
-import '../assets/css/Photon.css';
-import '../assets/css/App.css';
-
 import modelImage from  './helpers/model-image'
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
