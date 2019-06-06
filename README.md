@@ -8,3 +8,13 @@
 Currently available for MacOS and Windows.
 
 Download [last release](https://github.com/geraldoramos/nikola/releases/latest)
+
+## Features
+
+> Real-time location tracking
+> Track of several statuses (Speed, battery, temperature, etc...)
+> Remote locking/unlocking
+> Remote climate control
+> Auto-update
+
+
