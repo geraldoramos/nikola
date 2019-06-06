@@ -195,5 +195,5 @@ icon={{
 }
 
 export default GoogleApiWrapper({
-  apiKey: process.env.GOOGLE_MAPS || 'AIzaSyCGoH7CvDusHYHctKPeCYjMi3oj-xp0ZVA'
+  apiKey: process.env.GOOGLE_MAPS
 })(MapContainer)
