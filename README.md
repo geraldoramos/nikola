@@ -1,5 +1,5 @@
 <p align="center"> 
-<img width="200px" src="https://firebasestorage.googleapis.com/v0/b/nikola-ffeaf.appspot.com/o/logo.svg?alt=media&token=1c85c797-f2bb-413c-80d7-b306f5440eb0">
+<img width="200px" src="https://firebasestorage.googleapis.com/v0/b/nikola-ffeaf.appspot.com/o/logo.png?alt=media&token=f1d61c08-5ea7-4e75-9d6f-a3253d4a215a">
 </p>
 
 
