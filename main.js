@@ -27,6 +27,7 @@ if (process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) |
 }
 
 function createWindow() {
+
   // start autoUpdater
   autoUpdater.checkForUpdatesAndNotify();
 
@@ -68,7 +69,7 @@ function createWindow() {
   }
 
 
-  tray.setToolTip('Nikola App')
+  tray.setToolTip('Nikola')
 
   // Don't show the app in the dock
   if (process.platform === 'darwin') {
@@ -236,7 +237,16 @@ function createWindow() {
             click() { 
               app.quit()
             }
-          }
+          },
+          actions.separator(),
+          {
+            label: 'Open DevTools',
+            click() { 
+              mainWindow.openDevTools({
+                mode: 'detach'
+              })
+            }
+          },
         ]
       });
     }
