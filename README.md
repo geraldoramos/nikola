@@ -43,7 +43,7 @@ After that, you'll see the binaries in the `packed` folder.
 
 ## Todo
 
-* Add more control features, ([suggest which one](https://github.com/geraldoramos/nikola/issues)
+* Add more control features, ([suggest which one](https://github.com/geraldoramos/nikola/issues))
 * Explore streaming api (currently polling data)
 * Support multiple cars under same account
 
