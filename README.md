@@ -9,16 +9,16 @@
 
 Download [last release](https://github.com/geraldoramos/nikola/releases/latest)
 
-PS: Tesla Auth token is stored locally uppon login and is not sent anywhere besides Tesla servers. To remove the token from your computer, just logout.
+*PS: Tesla Auth token is stored locally uppon login and is not sent anywhere besides Tesla servers. To remove the token from your computer, just logout*
 
 ## Features
 
-* Authentication direc
 * Real-time location tracking
 * Track of several statuses (Speed, battery, temperature, etc...)
 * Remote locking/unlocking
 * Remote climate control
 * Auto-update
+* Tesla AuthKey stored locally
 
 
 ## Contributing
