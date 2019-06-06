@@ -31,9 +31,6 @@ function createWindow() {
   // start autoUpdater
   autoUpdater.checkForUpdatesAndNotify();
 
-  autoUpdater.on('update-downloaded', (info) => {
-  console.log('download complete')
-})
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
