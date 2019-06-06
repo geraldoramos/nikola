@@ -9,7 +9,7 @@
 
 Download [last release](https://github.com/geraldoramos/nikola/releases/latest)
 
-*PS: Tesla Auth token is stored locally uppon login and is not sent anywhere besides Tesla servers. To remove the token from your computer, just logout*
+*PS: Tesla Auth token is stored locally uppon login and is not sent anywhere besides Tesla servers. To remove the token from your computer, just logout.*
 
 ## Features
 
