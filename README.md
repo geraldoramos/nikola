@@ -30,11 +30,13 @@ Download [last release](https://github.com/geraldoramos/nikola/releases/latest)
 2. Install the dependencies: `yarn`
 3. Build the code, start the app, and watch for changes: `GOOGLE_MAPS=YOURKEY yarn run dev`
 
-To make sure that your code works in the finished app, you can generate the binary (make sure to include your google maps key in the `../components/Maps.js` file.
+To make sure that your code works in the finished app, you can generate the binary using:
 
 ```
 $ yarn run build
 ```
+
+Make sure to include your google maps key in the `../components/Maps.js` file.
 
 After that, you'll see the binaries in the `packed` folder.
 
