@@ -19,11 +19,10 @@ Download [last release](https://github.com/geraldoramos/nikola/releases/latest)
 * Track of several statuses (Speed, battery, temperature, etc...)
 * Remote locking/unlocking
 * Remote climate control
-* Auto-update
+* Auto-update (of the app, not the car)
 * Custom images for all Tesla models
 * Dynamic icon for battery level
-* Tesla AuthKey stored locally
-
+* Tesla AuthKey stored locally 
 
 
 ## Contributing
@@ -41,4 +40,13 @@ $ yarn run build
 Make sure to include your google maps key in the `../components/Maps.js` file.
 
 After that, you'll see the binaries in the `packed` folder.
+
+## Todo
+
+* Add more control features, ([suggest which one](https://github.com/geraldoramos/nikola/issues)
+* Explore streaming api (currently polling data)
+* Support multiple cars under same account
+
+## License
+MIT License
 
