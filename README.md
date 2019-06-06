@@ -18,7 +18,10 @@ Download [last release](https://github.com/geraldoramos/nikola/releases/latest)
 * Remote locking/unlocking
 * Remote climate control
 * Auto-update
+* Custom images for all Tesla models
+* Dynamic icon for battery level
 * Tesla AuthKey stored locally
+
 
 
 ## Contributing
