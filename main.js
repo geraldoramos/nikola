@@ -1,4 +1,6 @@
 'use strict';
+const {autoUpdater} = require("electron-updater");
+const log = require('electron-log');
 const { app, BrowserWindow, systemPreferences, Tray, ipcMain, shell } = require('electron');
 const path = require('path')
 const url = require('url')
@@ -8,8 +10,6 @@ const Store = require('electron-store');
 const store = new Store();
 const Poller = require('./poller');
 const contextMenu = require('electron-context-menu');
-const {autoUpdater} = require("electron-updater");
-const log = require('electron-log');
 
 // Logging
 autoUpdater.logger = log;
