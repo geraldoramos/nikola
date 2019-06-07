@@ -46,7 +46,12 @@ After that, you'll see the binaries in the `packed` folder.
 * Add more control features, ([suggest which one](https://github.com/geraldoramos/nikola/issues))
 * Explore streaming api (currently polling data)
 * Support multiple cars under same account
+* Send address to car
+* Notifications (battery low, charging stopped, and more)
 
 ## License
 MIT License
+
+## DISCLAIMER
+This software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, title and non-infringement. Use at Your Own Risk.
 
