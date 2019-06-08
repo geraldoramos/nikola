@@ -67,7 +67,11 @@ class Home extends React.Component {
             batteryIcon: batteryLevelIcon(store.chargeState ? store.chargeState.battery_level : 'default'),
             vehicle:{
               model: store.vehicle.model,
-              state: store.vehicle.state
+              state: store.vehicle.state,
+              temperatureUnits: store.guiSettings? store.guiSettings.gui_temperature_units : null,
+              distanceUnits: store.guiSettings? store.guiSettings.gui_distance_units : null,
+              chargeRateUnits: store.guiSettings? store.guiSettings.gui_charge_rate_units : null
+
             },
             status:{
               carVersion: store.vehicleState? store.vehicleState.car_version: null,

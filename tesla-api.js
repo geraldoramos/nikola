@@ -106,6 +106,21 @@ module.exports = {
             });
         })
     },
+    guiSettings: (authToken, vehicleID) => {
+        return new Promise((resolve, reject) => {
+            const vehicleOptions = {
+                authToken,
+                vehicleID
+            };
+            tjs.guiSettings(vehicleOptions, function (err, data) {
+                if (err) {
+                    console.log(err)
+                    reject(err)
+                }
+                resolve(data)
+            });
+        })
+    },
     lockDoor: (authToken, vehicleID) => {
         return new Promise((resolve, reject) => {
             const vehicleOptions = {

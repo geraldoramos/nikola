@@ -132,12 +132,14 @@ function createWindow() {
           const chargeState = await tesla.chargeState(authToken, vehicle.vehicleID)
           const climateState = await tesla.climateState(authToken, vehicle.vehicleID)
           const vehicleState = await tesla.vehicleState(authToken, vehicle.vehicleID)
+          const guiSettings = await tesla.guiSettings(authToken, vehicle.vehicleID)
           const allData = {
             driveState,
             chargeState,
             vehicle,
             climateState,
-            vehicleState
+            vehicleState,
+            guiSettings
           }
           mainWindow.webContents.send('tesla-data', allData)
           mainWindow.webContents.send('tesla-data-error', false)
