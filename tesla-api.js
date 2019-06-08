@@ -166,5 +166,19 @@ module.exports = {
             });
         })
     },
-
+    setSentryMode: (authToken, vehicleID, onoff) => {
+        return new Promise((resolve, reject) => {
+            const vehicleOptions = {
+                authToken,
+                vehicleID
+            };
+            tjs.setSentryMode(vehicleOptions, onoff, function (err, done) {
+                if (err) {
+                    console.log(err)
+                    reject(err)
+                }
+                resolve(done)
+            });
+        })
+    }
 }

@@ -178,7 +178,7 @@ function createWindow() {
     ipcMain.on('door', async (event, action) => {
       mainWindow.webContents.send('action-loading', action)
       try {
-        if(action === 'unlock-door'){
+        if(action === 'door-unlock'){
           await tesla.unLockDoor(store.get('authToken'), store.get('vehicleId'))
         } else{
           await tesla.lockDoor(store.get('authToken'), store.get('vehicleId'))
@@ -201,6 +201,25 @@ function createWindow() {
         } else{
           console.log('triggered climate stop')
           await tesla.climateStop(store.get('authToken'), store.get('vehicleId'))
+        }
+        await getTeslaData()
+        mainWindow.webContents.send('action-loading', null)
+      } catch (error) {
+        console.log(error)
+        mainWindow.webContents.send('action-error', `Error with ${action}`)
+        mainWindow.webContents.send('action-loading', null)
+      }    
+    })
+
+    ipcMain.on('sentryMode', async (event, action) => {
+      mainWindow.webContents.send('action-loading', action)
+      try {
+        if(action === 'sentry-on'){
+          console.log('triggered Sentry On')
+          await tesla.setSentryMode(store.get('authToken'), store.get('vehicleId'), true)
+        } else{
+          console.log('triggered Sentry Off')
+          await tesla.setSentryMode(store.get('authToken'), store.get('vehicleId'), false)
         }
         await getTeslaData()
         mainWindow.webContents.send('action-loading', null)

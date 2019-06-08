@@ -8,11 +8,12 @@ import Actions from './Actions'
 import ReactTooltip from 'react-tooltip'
 
 class App extends React.Component {
-
+  
   constructor(props) {
     super(props);
     this.handleLockClick = this.handleLockClick.bind(this);
     this.handleFanClick = this.handleFanClick.bind(this);
+    this.handleSentryClick = this.handleSentryClick.bind(this);
   }
 
   handleLockClick(event) {
@@ -21,6 +22,10 @@ class App extends React.Component {
 
   handleFanClick(event) {
     ipcRenderer.send('climate', event.target.name)
+  }
+
+  handleSentryClick(event) {
+    ipcRenderer.send('sentryMode', event.target.name)
   }
 
 
@@ -93,12 +98,12 @@ class App extends React.Component {
             <div className="controls-items">
             <Actions type='door' loading={this.props.actionLoading} handle={this.handleLockClick} status={this.props.status.locked} />
             <Actions type='climate' loading={this.props.actionLoading} handle={this.handleFanClick} status={this.props.status.climate} />
+            <Actions type='sentryMode' loading={this.props.actionLoading} handle={this.handleSentryClick} status={this.props.status.sentryMode} />
             </div>
             </div>
             <hr/>
             <div className="location">
             <div className="summary">Location</div>
-            {/* <div className="description">Location as of </div> */}
             <Maps center={this.props.status.location} />
             </div>
       </div>
