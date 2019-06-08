@@ -13,7 +13,7 @@ class Actions extends React.Component {
       if(this.props.type === 'door'){
         return (
           <div>
-        { this.props.loading === 'door-lock' || this.props.loading === 'door-lock' ?
+        { this.props.loading === 'door-lock' || this.props.loading === 'door-unlock' ?
           <div className="lds-dual-ring"></div>
           :
           <div onClick={this.props.handle}><img 
