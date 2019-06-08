@@ -11,7 +11,7 @@
 
 Download [last release](https://github.com/geraldoramos/nikola/releases/latest)
 
-*PS: Tesla Auth token is stored locally uppon login and is not sent anywhere besides Tesla servers. To remove the token from your computer, just logout.*
+*PS: Tesla Auth token is stored locally upon login and is not sent anywhere besides Tesla servers. To remove the token from your computer, just logout.*
 
 ## Features
 
@@ -19,6 +19,7 @@ Download [last release](https://github.com/geraldoramos/nikola/releases/latest)
 * Track of several statuses (Speed, battery, temperature, etc...)
 * Remote locking/unlocking
 * Remote climate control
+* Remote sentry mode toggle
 * Auto-update (of the app, not the car)
 * Custom images for all Tesla models
 * Dynamic icon for battery level
