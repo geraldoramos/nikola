@@ -70,11 +70,13 @@ class Home extends React.Component {
               state: store.vehicle.state
             },
             status:{
+              carVersion: store.vehicleState? store.vehicleState.car_version: null,
               batteryRange: store.chargeState ? store.chargeState.battery_range: null,
               batteryLevel: store.chargeState ? store.chargeState.battery_level: null,
               locked: store.vehicleState? store.vehicleState.locked : null,
               odometer:store.vehicleState? store.vehicleState.odometer : null,
               sentryMode:store.vehicleState? store.vehicleState.sentry_mode : null,
+              sentryModeAvailable:store.vehicleState? store.vehicleState.sentry_mode_available : null,
               valetMode:store.vehicleState? store.vehicleState.valet_mode : null,
               climate: store.climateState ? store.climateState.is_climate_on : null,
               speed: store.driveState? store.driveState.speed : null,
@@ -82,6 +84,7 @@ class Home extends React.Component {
               timetoFullCharge:store.chargeState ? store.chargeState.time_to_full_charge : null,
               temperature: store.climateState ? store.climateState.inside_temp: null,
               location: {lat: store.driveState?store.driveState.latitude:null, lng: store.driveState? store.driveState.longitude : null},
+              locationAsOf: store.driveState? store.driveState.gps_as_of : null
             }
           });
         }.bind(this));

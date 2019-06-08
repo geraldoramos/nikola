@@ -68,6 +68,7 @@ class App extends React.Component {
             Tesla {this.props.vehicle.model}
           </div>
           <ReactTooltip place="bottom" id='overview'>
+          <div className="tooltip">Car Version: <span>{this.props.status ? this.props.status.carVersion : null }</span></div>
           <div className="tooltip">Charging State: <span>{this.props.status ? this.props.status.chargingState : null }</span></div>
           <div className="tooltip">Battery Level: <span>{this.props.status ? `${this.props.status.batteryLevel}%` : null }</span></div>
           <div className="tooltip">Time to full charge: <span>{this.props.status ? `${this.props.status.timetoFullCharge} hours` : null }</span></div>
@@ -98,7 +99,7 @@ class App extends React.Component {
             <div className="controls-items">
             <Actions type='door' loading={this.props.actionLoading} handle={this.handleLockClick} status={this.props.status.locked} />
             <Actions type='climate' loading={this.props.actionLoading} handle={this.handleFanClick} status={this.props.status.climate} />
-            <Actions type='sentryMode' loading={this.props.actionLoading} handle={this.handleSentryClick} status={this.props.status.sentryMode} />
+            {this.props.status.sentryModeAvailable ? <Actions type='sentryMode' loading={this.props.actionLoading} handle={this.handleSentryClick} status={this.props.status.sentryMode} /> : null}
             </div>
             </div>
             <hr/>
