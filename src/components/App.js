@@ -83,7 +83,7 @@ class App extends React.Component {
             </strong><span className="note"> MI</span></span>
               </div>
             <div>
-            <span className="description"><FontAwesomeIcon icon={faTemperatureLow} size="1x" color="#1BC47D"/><strong> {this.props.status.temperature} </strong><span className="note"> F</span></span>
+            <span className="description"><FontAwesomeIcon icon={faTemperatureLow} size="1x" color="#1BC47D"/><strong> {this.props.status.temperature} </strong><span className="note"> C</span></span>
               </div>
             </div>
             <hr/>
