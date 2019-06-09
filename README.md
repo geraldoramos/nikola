@@ -6,7 +6,7 @@
 
 ## Get Nikola
 
-> Currently available for MacOS and Windows.
+> Currently available for MacOS and Windows (Linux coming soon).
 
 Download [last release](https://github.com/geraldoramos/nikola/releases/latest)
 
@@ -27,9 +27,11 @@ Download [last release](https://github.com/geraldoramos/nikola/releases/latest)
 
 ## Contributing
 
-1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your local device
-2. Install the dependencies: `yarn`
-3. Build the code, start the app, and watch for changes: `GOOGLE_MAPS=YOURKEY yarn run dev`
+1. Check work backlog [here](https://github.com/geraldoramos/nikola/projects)
+2. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your local device
+3. Install the dependencies: `yarn`
+4. Acquire a key from [google maps javascript api](https://developers.google.com/maps/documentation/javascript/get-api-key)
+4. Build the code, start the app, and watch for changes: `GOOGLE_MAPS=YOURKEY yarn run dev`
 
 To make sure that your code works in the finished app, you can generate the binary using:
 
@@ -37,17 +39,14 @@ To make sure that your code works in the finished app, you can generate the bina
 $ yarn run build
 ```
 
-Make sure to include your google maps key in the `../components/Maps.js` file.
+Make sure to include your google maps key in the `../components/Maps.js` file before building and remember to not commit it. I will do a way to use it as `ENV` but it doesn't work for the build, just for dev environment for now.
 
 After that, you'll see the binaries in the `packed` folder.
 
 ## Todo
 
-* Add more control features, ([suggest which one](https://github.com/geraldoramos/nikola/issues))
-* Explore streaming api (currently polling data)
-* Support multiple cars under same account
-* Send address to car
-* Notifications (battery low, charging stopped, and more)
+Check [Projects](https://github.com/geraldoramos/nikola/projects) for details.
+
 
 ## License
 MIT License
