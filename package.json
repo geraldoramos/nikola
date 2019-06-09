@@ -2,7 +2,7 @@
   "name": "Nikola",
   "version": "0.2.5",
   "description": "Open source and unoffocial cross-platform desktop app to control tesla vehicles",
-  "author": "Geraldo Ramos",
+  "author": "Geraldo Ramos <email@geraldoramos.com> (https://geraldoramos.com)",
   "homepage": "https://github.com/geraldoramos/nikola",
   "repository": {
     "type": "git",
@@ -40,6 +40,12 @@
       "publish": [
         "github"
       ]
+    },
+    "linux": {
+      "target": ["AppImage", "deb", "zip"],
+      "publish": [
+        "github"
+      ]
     }
   },
   "license": "MIT",
@@ -48,8 +54,8 @@
     "prod": "webpack --config webpack.build.config.js && electron --noDevServer .",
     "dev": "webpack-dev-server --hot --host 0.0.0.0 --config=./webpack.dev.config.js",
     "build-ui": "webpack --config webpack.build.config.js",
-    "build": "yarn build-ui && build -w -m",
-    "publish": "yarn build-ui && build -m -w -p always"
+    "build": "yarn build-ui && build -w -m -l",
+    "publish": "build -m -w -l -p always"
   },
   "devDependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.18",

@@ -56,14 +56,13 @@ function createWindow() {
     } else {
       tray = new Tray(path.join(__dirname, 'src', 'assets', 'img', 'white.png'))
     }
+    tray.setToolTip('Nikola')
   }
 
-  if (process.platform === 'win32') {
+  if (process.platform !== 'darwin') {
       tray = new Tray(path.join(__dirname, 'src', 'assets', 'img', 'win_tray.png'))
   }
-
-
-  tray.setToolTip('Nikola')
+  
 
   // Don't show the app in the dock
   if (process.platform === 'darwin') {
@@ -155,6 +154,11 @@ function createWindow() {
     }
 
     // Actions
+    // require some sleep to prevent state update delay
+    const sleep = (ms = 0) => {
+      return new Promise(r => setTimeout(r, ms));
+    }
+
     ipcMain.on('login-attempt', async (event, loginEmailPw) => {
       startLogin(false, loginEmailPw)
     })
@@ -174,6 +178,7 @@ function createWindow() {
           await tesla.lockDoor(store.get('authToken'), store.get('vehicleId'))
         }
         await getTeslaData()
+        sleep(500)
         mainWindow.webContents.send('action-loading', null)
       } catch (error) {
         log.error(error)
@@ -193,6 +198,7 @@ function createWindow() {
           await tesla.climateStop(store.get('authToken'), store.get('vehicleId'))
         }
         await getTeslaData()
+        sleep(500)
         mainWindow.webContents.send('action-loading', null)
       } catch (error) {
         log.error(error)
@@ -212,6 +218,7 @@ function createWindow() {
           await tesla.setSentryMode(store.get('authToken'), store.get('vehicleId'), false)
         }
         await getTeslaData()
+        sleep(500)
         mainWindow.webContents.send('action-loading', null)
       } catch (error) {
         log.error(error)
@@ -226,6 +233,7 @@ function createWindow() {
           log.info('Changing temperature')
           await tesla.setTemps(store.get('authToken'), store.get('vehicleId'), temp)
           await getTeslaData()
+          sleep(500)
           mainWindow.webContents.send('action-loading', null)
       } catch (error) {
         log.error(error)

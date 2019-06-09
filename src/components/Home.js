@@ -25,7 +25,7 @@ class Home extends React.Component {
       componentDidMount() {
 
         ipcRenderer.once('platform', function (event, platform) {
-          if(platform==='win32'){
+          if(platform!=='darwin'){
             document.querySelector('.header-arrow').style = 'display: none'
             document.querySelector('.toolbar').style = '-webkit-app-region: drag;min-height: 10px'
           }
