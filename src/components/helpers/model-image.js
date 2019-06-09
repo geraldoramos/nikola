@@ -20,7 +20,7 @@ export default (model) =>{
         img = modelx
         break
       default:
-        battery = model3
+        img = model3
     }
     return img
   }

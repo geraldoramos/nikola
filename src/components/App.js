@@ -7,14 +7,21 @@ const {ipcRenderer, remote} = window.require('electron')
 import Actions from './Actions'
 import ReactTooltip from 'react-tooltip'
 import cToF from './helpers/c-to-f'
+import fToC from './helpers/f-to-c'
+import Modal from './Modal'
 
 class App extends React.Component {
   
   constructor(props) {
     super(props);
+    this.state = {
+      climateTempShowModal: false
+  };
     this.handleLockClick = this.handleLockClick.bind(this);
     this.handleFanClick = this.handleFanClick.bind(this);
-    this.handleSentryClick = this.handleSentryClick.bind(this);
+    this.handleClimateTempClick = this.handleClimateTempClick.bind(this);
+    this.handleClimateTempOk = this.handleClimateTempOk.bind(this);
+    this.handleClimateTempCancel = this.handleClimateTempCancel.bind(this);
   }
 
   handleLockClick(event) {
@@ -27,6 +34,28 @@ class App extends React.Component {
 
   handleSentryClick(event) {
     ipcRenderer.send('sentryMode', event.target.name)
+  }
+
+  handleClimateTempClick(){
+    this.setState({climateTempShowModal:true})
+  }
+
+  handleClimateTempOk(temp){
+    if(temp.match(/^-{0,1}\d+$/)){
+      this.setState({climateTempShowModal:false})
+      const temperature = this.props.vehicle.temperatureUnits === 'F' ? fToC(temp) : temp
+      ipcRenderer.send('climateTemp', temperature)
+      return
+    }
+    this.setState({climateTempModalError:'Climate temperature needs to be a number'})
+    setTimeout(() => {
+      this.setState({climateTempModalError:null})
+    }, 2000);
+    
+  }
+
+  handleClimateTempCancel(){
+    this.setState({climateTempShowModal:false})
   }
 
 
@@ -63,27 +92,33 @@ class App extends React.Component {
     }
 
     return (
-    <div>
-          <div className="car-model">
+    <div>  
+      <Modal visible={this.state.climateTempShowModal} onOk={this.handleClimateTempOk} 
+        onCancel={this.handleClimateTempCancel} errorMessage={this.state.climateTempModalError}
+        title='Desired temperature' info="Set temperature for both passenger and driver"
+        type='number' placeholder={`Temperature in ${this.props.vehicle.temperatureUnits}`}/>
+      <div className="car-model">
           <div className="title">
             Tesla {this.props.vehicle.model}
           </div>
           <ReactTooltip place="bottom" id='overview'>
-          <div className="tooltip">Car Version: <span>{this.props.status ? this.props.status.carVersion : null }</span></div>
-          <div className="tooltip">Charging State: <span>{this.props.status ? this.props.status.chargingState : null }</span></div>
-          <div className="tooltip">Battery Level: <span>{this.props.status ? `${this.props.status.batteryLevel}%` : null }</span></div>
+          <div className="tooltip">Car version: <span>{this.props.status ? this.props.status.carVersion : null }</span></div>
+          <div className="tooltip">Charging state: <span>{this.props.status ? this.props.status.chargingState : null }</span></div>
+          <div className="tooltip">Battery level: <span>{this.props.status ? `${this.props.status.batteryLevel}%` : null }</span></div>
           <div className="tooltip">Time to full charge: <span>{this.props.status ? `${this.props.status.timetoFullCharge} hours` : null }</span></div>
           <div className="tooltip">Door: <span>{this.props.status ? this.props.status.locked ? 'Locked' : 'Unlocked': null }</span></div>
           <div className="tooltip">Climate: <span>{this.props.status ? this.props.status.climate ? 'ON' : 'OFF': null }</span></div>
+          <div className="tooltip">Passenger temp. setting: <span>{this.props.status ? (this.props.vehicle.temperatureUnits === 'F' ? Math.round(cToF(this.props.status.passengerTempSetting)) : Math.round(this.props.status.passengerTempSetting)) : null }</span></div>
+          <div className="tooltip">Driver temp. setting: <span>{this.props.status ? (this.props.vehicle.temperatureUnits === 'F' ? Math.round(cToF(this.props.status.driverTempSetting)) : Math.round(this.props.status.passengerTempSetting)) : null }</span></div>
           <div className="tooltip">Odometer: <span>{this.props.status ? `${Math.trunc(this.props.status.odometer)} ${this.props.vehicle.distanceUnits.split('/')[0].toUpperCase()}` : null }</span></div>
-          <div className="tooltip">Sentry Mode: <span>{this.props.status ? this.props.status.sentryMode ? 'ON' : 'OFF': null }</span></div>
-          <div className="tooltip">Valet Mode: <span>{this.props.status ? this.props.status.valetMode ? 'ON' : 'OFF': null }</span></div>
+          <div className="tooltip">Sentry mode: <span>{this.props.status ? this.props.status.sentryMode ? 'ON' : 'OFF': null }</span></div>
+          <div className="tooltip">Valet mode: <span>{this.props.status ? this.props.status.valetMode ? 'ON' : 'OFF': null }</span></div>
           </ReactTooltip>
           <a data-tip data-for='overview'><img src={modelImage(this.props.vehicle.model)} width="100" height="40"/></a>
           </div>
           <div className="status">
           <div>
-            <span className="description"><FontAwesomeIcon icon={faTachometerAlt} size="1x" color="#1BC47D"/><strong> {!this.props.status.speed ? 'Stopped' : `${this.props.status.speed}`}</strong>
+            <span className="description"><FontAwesomeIcon icon={faTachometerAlt} size="1x" color="#1BC47D"/><strong> {!this.props.status.speed ? 'Stopped' : `${Math.round(this.props.status.speed)}`}</strong>
             <span className="note"> {this.props.status.speed ? this.props.vehicle.distanceUnits : '' }</span></span>
               </div>
             <div>
@@ -91,7 +126,7 @@ class App extends React.Component {
             </strong><span className="note"> {this.props.vehicle.distanceUnits.split('/')[0]}</span></span>
               </div>
             <div>
-            <span className="description"><FontAwesomeIcon icon={faTemperatureLow} size="1x" color="#1BC47D"/><strong> {this.props.vehicle.temperatureUnits === 'F' ? cToF(this.props.status.temperature) : this.props.status.temperature } 
+            <span className="description"><FontAwesomeIcon icon={faTemperatureLow} size="1x" color="#1BC47D"/><strong> {this.props.vehicle.temperatureUnits === 'F' ? Math.round(cToF(this.props.status.temperature)) : Math.round(this.props.status.temperature) } 
             </strong><span className="note"> {this.props.vehicle.temperatureUnits}</span></span>
               </div>
             </div>
@@ -103,6 +138,8 @@ class App extends React.Component {
             <Actions type='door' loading={this.props.actionLoading} handle={this.handleLockClick} status={this.props.status.locked} />
             <Actions type='climate' loading={this.props.actionLoading} handle={this.handleFanClick} status={this.props.status.climate} />
             {this.props.status.sentryModeAvailable ? <Actions type='sentryMode' loading={this.props.actionLoading} handle={this.handleSentryClick} status={this.props.status.sentryMode} /> : null}
+            <Actions type='climateTemp' loading={this.props.actionLoading} handle={this.handleClimateTempClick} status={this.props.status.driverTempSetting} />
+            
             </div>
             </div>
             <hr/>

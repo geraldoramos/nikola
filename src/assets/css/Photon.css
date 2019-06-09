@@ -317,7 +317,7 @@
    clear: both;
  }
  
- .btn {
+ .btn, .ant-btn {
    display: inline-block;
    padding: 3px 8px;
    margin-bottom: 0;
@@ -334,10 +334,17 @@
    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.06);
    -webkit-app-region: no-drag;
  }
- .btn:focus {
+ .btn:focus,.ant-btn:focus {
    outline: none;
    box-shadow: none;
  }
+
+
+.btn:hover,.ant-btn:hover {
+  background-color:  rgb(211, 5, 12);
+}
+
+
  
  .btn-mini {
    padding: 2px 6px;
@@ -376,12 +383,13 @@
    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
  }
  
- .btn-primary {
+ .btn-primary, .ant-btn {
+   color: white;
    border-color: #C50005;
    border-bottom-color: #C50005;
    background-color: #C50005;
  }
- .btn-primary:active {
+ .btn-primary:active, .ant-btn:active {
    background-color: rgb(202, 35, 41);
  }
  
@@ -500,6 +508,20 @@
  .btn-group .active .icon {
    color: #fff;
  }
+
+ .ant-btn-ghost {
+  color: white;
+  opacity: 0.6;
+  background-color: transparent;
+  border-color: #d9d9d9;
+}
+.ant-btn-ghost:hover{
+  color: white;
+  opacity: 1;
+  background-color: transparent;
+  border-color: #d9d9d9;
+
+}
  
  .toolbar {
    min-height: 3px;

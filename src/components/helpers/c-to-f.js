@@ -1,4 +1,4 @@
-export default function celToFah(celsius) {
-    const fahrenheit = Math.round((celsius * (9/5)) + 32);
+export default function cToF(celsius) {
+    const fahrenheit = (celsius * (9/5)) + 32
     return fahrenheit;
  }

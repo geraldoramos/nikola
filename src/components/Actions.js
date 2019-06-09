@@ -5,11 +5,12 @@ import nofan from '../assets/img/nofan.svg'
 import fan from '../assets/img/fan.svg'
 import sentryOn from '../assets/img/sentry-on.svg'
 import sentryOff from '../assets/img/sentry-off.svg'
+import temp from '../assets/img/temp.svg'
 
 class Actions extends React.Component {
 
   render() {
-
+    
       if(this.props.type === 'door'){
         return (
           <div>
@@ -52,6 +53,21 @@ class Actions extends React.Component {
           src={this.props.status ? sentryOn : sentryOff}/></div>
           }
           </div>
+        )
+      }
+
+      if(this.props.type === 'climateTemp'){
+        return (
+          <div>
+          { this.props.loading === 'climate-temp' ?
+          <div className="lds-dual-ring"></div>
+          :
+          <div onClick={this.props.handle}><img 
+          title={`Current target is: ${this.props.status}`} 
+          name='climate-temp' 
+          src={temp}/></div>}
+          </div>
+          
         )
       }
   }

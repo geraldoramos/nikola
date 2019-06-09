@@ -64,31 +64,33 @@ class Home extends React.Component {
           this.setState({
             loading:false,
             firstData:true,
-            batteryIcon: batteryLevelIcon(store.chargeState ? store.chargeState.battery_level : 'default'),
+            batteryIcon: batteryLevelIcon(store.charge_state ? store.charge_state.battery_level : 'default'),
             vehicle:{
-              model: store.vehicle.model,
-              state: store.vehicle.state,
-              temperatureUnits: store.guiSettings? store.guiSettings.gui_temperature_units : null,
-              distanceUnits: store.guiSettings? store.guiSettings.gui_distance_units : null,
-              chargeRateUnits: store.guiSettings? store.guiSettings.gui_charge_rate_units : null
+              model: store.model,
+              state: store.state,
+              temperatureUnits: store.gui_settings? store.gui_settings.gui_temperature_units : null,
+              distanceUnits: store.gui_settings? store.gui_settings.gui_distance_units : null,
+              chargeRateUnits: store.gui_settings? store.gui_settings.gui_charge_rate_units : null
 
             },
             status:{
-              carVersion: store.vehicleState? store.vehicleState.car_version: null,
-              batteryRange: store.chargeState ? store.chargeState.battery_range: null,
-              batteryLevel: store.chargeState ? store.chargeState.battery_level: null,
-              locked: store.vehicleState? store.vehicleState.locked : null,
-              odometer:store.vehicleState? store.vehicleState.odometer : null,
-              sentryMode:store.vehicleState? store.vehicleState.sentry_mode : null,
-              sentryModeAvailable:store.vehicleState? store.vehicleState.sentry_mode_available : null,
-              valetMode:store.vehicleState? store.vehicleState.valet_mode : null,
-              climate: store.climateState ? store.climateState.is_climate_on : null,
-              speed: store.driveState? store.driveState.speed : null,
-              chargingState: store.chargeState ? store.chargeState.charging_state : null,
-              timetoFullCharge:store.chargeState ? store.chargeState.time_to_full_charge : null,
-              temperature: store.climateState ? store.climateState.inside_temp: null,
-              location: {lat: store.driveState?store.driveState.latitude:null, lng: store.driveState? store.driveState.longitude : null},
-              locationAsOf: store.driveState? store.driveState.gps_as_of : null
+              driverTempSetting: store.climate_state ? store.climate_state.driver_temp_setting: null,
+              passengerTempSetting: store.climate_state ? store.climate_state.passenger_temp_setting: null,
+              carVersion: store.vehicle_state? store.vehicle_state.car_version: null,
+              batteryRange: store.charge_state ? store.charge_state.battery_range: null,
+              batteryLevel: store.charge_state ? store.charge_state.battery_level: null,
+              locked: store.vehicle_state? store.vehicle_state.locked : null,
+              odometer:store.vehicle_state? store.vehicle_state.odometer : null,
+              sentryMode:store.vehicle_state? store.vehicle_state.sentry_mode : null,
+              sentryModeAvailable:store.vehicle_state? store.vehicle_state.sentry_mode_available : null,
+              valetMode:store.vehicle_state? store.vehicle_state.valet_mode : null,
+              climate: store.climate_state ? store.climate_state.is_climate_on : null,
+              speed: store.drive_state? store.drive_state.speed : null,
+              chargingState: store.charge_state ? store.charge_state.charging_state : null,
+              timetoFullCharge:store.charge_state ? store.charge_state.time_to_full_charge : null,
+              temperature: store.climate_state ? store.climate_state.inside_temp: null,
+              location: {lat: store.drive_state?store.drive_state.latitude:null, lng: store.drive_state? store.drive_state.longitude : null},
+              locationAsOf: store.drive_state? store.drive_state.gps_as_of : null
             }
           });
         }.bind(this));

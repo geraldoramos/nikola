@@ -108,7 +108,7 @@ function createWindow() {
         await getTeslaData(true)
         startPoller()
       } catch (error) {
-        console.log(error)
+        log.error(error)
         store.delete('authToken')
         mainWindow.webContents.send('login-failed', JSON.stringify(error))
       }
@@ -128,23 +128,11 @@ function createWindow() {
             mainWindow.webContents.send('tesla-data', {vehicle})
             return
           }
-          const driveState = await tesla.driveState(authToken, vehicle.vehicleID)
-          const chargeState = await tesla.chargeState(authToken, vehicle.vehicleID)
-          const climateState = await tesla.climateState(authToken, vehicle.vehicleID)
-          const vehicleState = await tesla.vehicleState(authToken, vehicle.vehicleID)
-          const guiSettings = await tesla.guiSettings(authToken, vehicle.vehicleID)
-          const allData = {
-            driveState,
-            chargeState,
-            vehicle,
-            climateState,
-            vehicleState,
-            guiSettings
-          }
-          mainWindow.webContents.send('tesla-data', allData)
+          const vehicleData = await tesla.vehicleData(authToken, vehicle.vehicleID)
+          mainWindow.webContents.send('tesla-data', {model: vehicle.model, ...vehicleData})
           mainWindow.webContents.send('tesla-data-error', false)
         } catch (error) {
-          console.log(error)
+          log.error(error)
           mainWindow.webContents.send('tesla-data-error', true)
         }
       }
@@ -188,7 +176,7 @@ function createWindow() {
         await getTeslaData()
         mainWindow.webContents.send('action-loading', null)
       } catch (error) {
-        console.log(error)
+        log.error(error)
         mainWindow.webContents.send('action-error', `Error with ${action}`)
         mainWindow.webContents.send('action-loading', null)
       }    
@@ -198,16 +186,16 @@ function createWindow() {
       mainWindow.webContents.send('action-loading', action)
       try {
         if(action === 'climate-on'){
-          console.log('triggered climate start')
+          log.info('triggered climate start')
           await tesla.climateStart(store.get('authToken'), store.get('vehicleId'))
         } else{
-          console.log('triggered climate stop')
+          log.info('triggering climate stop')
           await tesla.climateStop(store.get('authToken'), store.get('vehicleId'))
         }
         await getTeslaData()
         mainWindow.webContents.send('action-loading', null)
       } catch (error) {
-        console.log(error)
+        log.error(error)
         mainWindow.webContents.send('action-error', `Error with ${action}`)
         mainWindow.webContents.send('action-loading', null)
       }    
@@ -217,17 +205,31 @@ function createWindow() {
       mainWindow.webContents.send('action-loading', action)
       try {
         if(action === 'sentry-on'){
-          console.log('triggered Sentry On')
+          log.info('triggering Sentry On')
           await tesla.setSentryMode(store.get('authToken'), store.get('vehicleId'), true)
         } else{
-          console.log('triggered Sentry Off')
+          log.info('triggering Sentry Off')
           await tesla.setSentryMode(store.get('authToken'), store.get('vehicleId'), false)
         }
         await getTeslaData()
         mainWindow.webContents.send('action-loading', null)
       } catch (error) {
-        console.log(error)
+        log.error(error)
         mainWindow.webContents.send('action-error', `Error with ${action}`)
+        mainWindow.webContents.send('action-loading', null)
+      }    
+    })
+
+    ipcMain.on('climateTemp', async (event, temp) => {
+      mainWindow.webContents.send('action-loading', 'climate-temp')
+      try {
+          log.info('Changing temperature')
+          await tesla.setTemps(store.get('authToken'), store.get('vehicleId'), temp)
+          await getTeslaData()
+          mainWindow.webContents.send('action-loading', null)
+      } catch (error) {
+        log.error(error)
+        mainWindow.webContents.send('action-error', `Error with climate-temp`)
         mainWindow.webContents.send('action-loading', null)
       }    
     })

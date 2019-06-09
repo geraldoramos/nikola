@@ -48,73 +48,14 @@ module.exports = {
             });
         })
     },
-    driveState: (authToken, vehicleID) => {
+    vehicleData: (authToken, vehicleID) => {
         return new Promise((resolve, reject) => {
             const vehicleOptions = {
                 authToken,
                 vehicleID
             };
-            tjs.driveState(vehicleOptions, function (err, data) {
+            tjs.vehicleData(vehicleOptions, function (err, data) {
                 if (err) {
-                    reject(err)
-                }
-                resolve(data)
-            });
-        })
-    },
-    vehicleState: (authToken, vehicleID) => {
-        return new Promise((resolve, reject) => {
-            const vehicleOptions = {
-                authToken,
-                vehicleID
-            };
-            tjs.vehicleState(vehicleOptions, function (err, data) {
-                if (err) {
-                    reject(err)
-                }
-                resolve(data)
-            });
-        })
-    },
-    chargeState: (authToken, vehicleID) => {
-        return new Promise((resolve, reject) => {
-            const vehicleOptions = {
-                authToken,
-                vehicleID
-            };
-            tjs.chargeState(vehicleOptions, function (err, data) {
-                if (err) {
-                    console.log(err)
-                    reject(err)
-                }
-                resolve(data)
-            });
-        })
-    },
-    climateState: (authToken, vehicleID) => {
-        return new Promise((resolve, reject) => {
-            const vehicleOptions = {
-                authToken,
-                vehicleID
-            };
-            tjs.climateState(vehicleOptions, function (err, data) {
-                if (err) {
-                    console.log(err)
-                    reject(err)
-                }
-                resolve(data)
-            });
-        })
-    },
-    guiSettings: (authToken, vehicleID) => {
-        return new Promise((resolve, reject) => {
-            const vehicleOptions = {
-                authToken,
-                vehicleID
-            };
-            tjs.guiSettings(vehicleOptions, function (err, data) {
-                if (err) {
-                    console.log(err)
                     reject(err)
                 }
                 resolve(data)
@@ -193,6 +134,22 @@ module.exports = {
                     reject(err)
                 }
                 resolve(done)
+            });
+        })
+    },
+    setTemps: (authToken, vehicleID, temp) => {
+        return new Promise((resolve, reject) => {
+            const vehicleOptions = {
+                authToken,
+                vehicleID
+            };
+            tjs.setTemps(vehicleOptions, temp, null, function (err, done) {
+                if (done.result && !done.err) {
+                    resolve(done.result)
+                    return
+                }
+                console.log(done.reason, err)
+                reject(done.reason)
             });
         })
     }
