@@ -63,7 +63,7 @@ class Actions extends React.Component {
           <div className="lds-dual-ring"></div>
           :
           <div onClick={this.props.handle}><img 
-          title={`Current target is: ${this.props.status}`} 
+          title={`Set desired temperature`} 
           name='climate-temp' 
           src={temp}/></div>}
           </div>

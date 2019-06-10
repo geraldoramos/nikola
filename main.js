@@ -90,7 +90,6 @@ function createWindow() {
 
   // Tesla data Pooling
   mainWindow.webContents.on('did-finish-load', () => {
-
   autoUpdater.checkForUpdatesAndNotify();
 
     mainWindow.webContents.send('platform', process.platform)
