@@ -6,7 +6,7 @@
 
 ## Get Nikola
 
-> Currently available for MacOS and Windows (Linux coming soon).
+> Currently available for MacOS, Windows and Linux.
 
 Download [last release](https://github.com/geraldoramos/nikola/releases/latest)
 
@@ -19,6 +19,7 @@ Download [last release](https://github.com/geraldoramos/nikola/releases/latest)
 * Remote locking/unlocking
 * Remote climate control
 * Remote sentry mode toggle
+* Remote temperature target set
 * Auto-update (of the app, not the car)
 * Custom images for all Tesla models
 * Dynamic icon for battery level
@@ -52,5 +53,5 @@ Check [Projects](https://github.com/geraldoramos/nikola/projects) for details.
 MIT License
 
 ## DISCLAIMER
-This software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, title and non-infringement. Use at Your Own Risk.
+This software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, title and non-infringement. Use at Your Own Risk. The distributed software tracks anonimized data for statistics purposes (Google Analytics). If you prefer a version without this, feel free to download the code and build your own.
 
