@@ -108,8 +108,7 @@ function createWindow() {
           store.set('authToken', authToken)
         }
         mainWindow.webContents.send('login', true)
-        // passing true to indicate initial login attempt and run immediatelly
-        await getTeslaData(true)
+        await getTeslaData()
         startPoller()
       } catch (error) {
         log.error(error)
@@ -120,10 +119,10 @@ function createWindow() {
 
     // get tesla Data
     let authToken;
-    const getTeslaData = async (first) => {
+    const getTeslaData = async () => {
       authToken = store.get('authToken')
 
-      if ((mainWindow.isVisible() || first) && authToken) {
+      if (mainWindow.isVisible() && authToken) {
         try {
           const vehicle = await tesla.vehicle(authToken)
           store.set('vehicleId', vehicle.vehicleID)
@@ -283,7 +282,12 @@ function createWindow() {
       startLogin(currentLogin, false)
     }
 
+    let firstshow = true
     mainWindow.on('show', async() => {
+      if(firstshow){
+        firstshow = false
+        return
+      }
       await getTeslaData()
     })
 
