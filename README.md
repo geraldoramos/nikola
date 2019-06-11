@@ -1,6 +1,6 @@
 <p align="center">
   <img src="https://firebasestorage.googleapis.com/v0/b/nikola-ffeaf.appspot.com/o/logonovo.svg?alt=media&token=0370731f-6240-41bb-bb30-db1db4947655" height="80"><br><br>
-  <a href="https://github.com/geraldoramos/nikola/issues"><img src=https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat></a>
+  <a href="https://github.com/geraldoramos/nikola/issues"><img src=https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat></a> <a href="https://github.com/geraldoramos/nikola/releases/latest"><img src=https://img.shields.io/github/downloads/geraldoramos/nikola/total.svg?style=flat></a>
   <p align="center"><strong>⚡Unofficial cross-platform desktop app to monitor and control Tesla vehicles, powered by Electron & React</strong><p>
 <img src="https://firebasestorage.googleapis.com/v0/b/nikola-ffeaf.appspot.com/o/bg1.png?alt=media&token=f2bbad8d-bd75-4b94-9134-a523f8278e24">
 
