@@ -121,6 +121,7 @@ function createWindow() {
     // get tesla Data
     let authToken;
     const getTeslaData = async (first) => {
+      log.info('Getting Tesla Data on ' + new Date())
       authToken = store.get('authToken')
 
       if ((mainWindow.isVisible() || first) && authToken) {
@@ -159,15 +160,12 @@ function createWindow() {
     }
 
     // Actions
-    // require some sleep to prevent state update delay
-    const sleep = (ms = 0) => {
-      return new Promise(r => setTimeout(r, ms));
-    }
-
-    ipcMain.on('login-attempt', async (event, loginEmailPw) => {
+ 
+     ipcMain.on('login-attempt', async (event, loginEmailPw) => {
       startLogin(false, loginEmailPw)
     })
 
+    // wait function
     async function wait(ms) {
       return new Promise(resolve => {
         setTimeout(resolve, ms);
@@ -182,8 +180,9 @@ function createWindow() {
         } else{
           await tesla.lockDoor(store.get('authToken'), store.get('vehicleId'))
         }
+        await wait(500)
         await getTeslaData()
-        sleep(500)
+        
         mainWindow.webContents.send('action-loading', null)
       } catch (error) {
         log.error(error)
@@ -202,8 +201,9 @@ function createWindow() {
           log.info('triggering climate stop')
           await tesla.climateStop(store.get('authToken'), store.get('vehicleId'))
         }
+        await wait(500)
         await getTeslaData()
-        sleep(500)
+        
         mainWindow.webContents.send('action-loading', null)
       } catch (error) {
         log.error(error)
@@ -222,8 +222,9 @@ function createWindow() {
           log.info('triggering Sentry Off')
           await tesla.setSentryMode(store.get('authToken'), store.get('vehicleId'), false)
         }
+        await wait(500)
         await getTeslaData()
-        sleep(500)
+        
         mainWindow.webContents.send('action-loading', null)
       } catch (error) {
         log.error(error)
@@ -237,8 +238,8 @@ function createWindow() {
       try {
           log.info('Changing temperature')
           await tesla.setTemps(store.get('authToken'), store.get('vehicleId'), temp)
+          await wait(500)
           await getTeslaData()
-          sleep(500)
           mainWindow.webContents.send('action-loading', null)
       } catch (error) {
         log.error(error)

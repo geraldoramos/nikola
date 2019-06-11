@@ -19,7 +19,6 @@ module.exports = {
         };
 
         tjs.vehicle(options, function (err, vehicle) {
-            console.log('run login ' + new Date())
             if (err) {
                 console.log(err)
                 reject(err)
