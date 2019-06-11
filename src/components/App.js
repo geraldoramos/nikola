@@ -8,6 +8,7 @@ import Actions from './Actions'
 import ReactTooltip from 'react-tooltip'
 import cToF from './helpers/c-to-f'
 import fToC from './helpers/f-to-c'
+import mToKm from './helpers/m-to-km'
 import Modal from './Modal'
 
 class App extends React.Component {
@@ -102,27 +103,27 @@ class App extends React.Component {
             Tesla {this.props.vehicle.model}
           </div>
           <ReactTooltip place="bottom" id='overview'>
-          <div className="tooltip">Car version: <span>{this.props.status ? this.props.status.carVersion : null }</span></div>
-          <div className="tooltip">Charging state: <span>{this.props.status ? this.props.status.chargingState : null }</span></div>
-          <div className="tooltip">Battery level: <span>{this.props.status ? `${this.props.status.batteryLevel}%` : null }</span></div>
-          <div className="tooltip">Time to full charge: <span>{this.props.status ? `${this.props.status.timetoFullCharge} hours` : null }</span></div>
-          <div className="tooltip">Door: <span>{this.props.status ? this.props.status.locked ? 'Locked' : 'Unlocked': null }</span></div>
-          <div className="tooltip">Climate: <span>{this.props.status ? this.props.status.climate ? 'ON' : 'OFF': null }</span></div>
-          <div className="tooltip">Passenger temp. setting: <span>{this.props.status ? (this.props.vehicle.temperatureUnits === 'F' ? Math.round(cToF(this.props.status.passengerTempSetting)) : Math.round(this.props.status.passengerTempSetting)) : null }</span></div>
-          <div className="tooltip">Driver temp. setting: <span>{this.props.status ? (this.props.vehicle.temperatureUnits === 'F' ? Math.round(cToF(this.props.status.driverTempSetting)) : Math.round(this.props.status.passengerTempSetting)) : null }</span></div>
-          <div className="tooltip">Odometer: <span>{this.props.status ? `${Math.trunc(this.props.status.odometer)} ${this.props.vehicle.distanceUnits.split('/')[0].toUpperCase()}` : null }</span></div>
-          <div className="tooltip">Sentry mode: <span>{this.props.status ? this.props.status.sentryMode ? 'ON' : 'OFF': null }</span></div>
-          <div className="tooltip">Valet mode: <span>{this.props.status ? this.props.status.valetMode ? 'ON' : 'OFF': null }</span></div>
+          <div className="tooltip">Car version: <span>{this.props.status.carVersion}</span></div>
+          <div className="tooltip">Charging state: <span>{this.props.status.chargingState}</span></div>
+          <div className="tooltip">Battery level: <span>{`${this.props.status.batteryLevel}%`}</span></div>
+          <div className="tooltip">Time to full charge: <span>{`${this.props.status.timetoFullCharge} hours`}</span></div>
+          <div className="tooltip">Door: <span>{this.props.status.locked ? 'Locked' : 'Unlocked'}</span></div>
+          <div className="tooltip">Climate: <span>{this.props.status.climate ? 'ON' : 'OFF'}</span></div>
+          <div className="tooltip">Passenger temp. setting: <span>{this.props.vehicle.temperatureUnits === 'F' ? Math.round(cToF(this.props.status.passengerTempSetting)) : Math.round(this.props.status.passengerTempSetting) + ` ${this.props.vehicle.temperatureUnits}`}</span></div>
+          <div className="tooltip">Driver temp. setting: <span>{this.props.vehicle.temperatureUnits === 'F' ? Math.round(cToF(this.props.status.driverTempSetting)) : Math.round(this.props.status.passengerTempSetting) + ` ${this.props.vehicle.temperatureUnits}` }</span></div>
+          <div className="tooltip">Odometer: <span>{this.props.vehicle.distanceUnits.split('/')[0] ==='km' ? Math.round(mToKm(this.props.status.odometer)) : Math.round(this.props.odometer) + ` ${this.props.vehicle.distanceUnits.split('/')[0].toUpperCase()}`}</span></div>
+          <div className="tooltip">Sentry mode: <span>{this.props.status.sentryMode ? 'ON' : 'OFF'}</span></div>
+          <div className="tooltip">Valet mode: <span>{this.props.status.valetMode ? 'ON' : 'OFF' }</span></div>
           </ReactTooltip>
           <a data-tip data-for='overview'><img src={modelImage(this.props.vehicle.model)} width="100" height="40"/></a>
           </div>
           <div className="status">
           <div>
-            <span className="description"><FontAwesomeIcon icon={faTachometerAlt} size="1x" color="#1BC47D"/><strong> {!this.props.status.speed ? 'Stopped' : `${Math.round(this.props.status.speed)}`}</strong>
-            <span className="note"> {this.props.status.speed ? this.props.vehicle.distanceUnits : '' }</span></span>
+            <span className="description"><FontAwesomeIcon icon={faTachometerAlt} size="1x" color="#1BC47D"/><strong> {!this.props.status.speed ? 'Stopped' : (this.props.vehicle.distanceUnits.split('/')[0] === 'km' ? Math.round(mToKm(this.props.status.speed)) : Math.round(this.props.speed))}</strong>
+            <span className="note"> {this.props.status.speed ? ` ${this.props.vehicle.distanceUnits}` : '' }</span></span>
               </div>
             <div>
-            <span className="description"><FontAwesomeIcon name={this.props.status.chargingState} icon={this.props.batteryIcon.type} size="1x" color={this.props.batteryIcon.color}/><strong> {this.props.status.batteryRange} 
+            <span className="description"><FontAwesomeIcon name={this.props.status.chargingState} icon={this.props.batteryIcon.type} size="1x" color={this.props.batteryIcon.color}/><strong> {(this.props.vehicle.distanceUnits.split('/')[0] ==='km' ? Math.round(mToKm(this.props.status.batteryRange)) : Math.round(this.props.batteryRange))} 
             </strong><span className="note"> {this.props.vehicle.distanceUnits.split('/')[0]}</span></span>
               </div>
             <div>
