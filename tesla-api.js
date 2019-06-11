@@ -1,4 +1,5 @@
 const tjs = require('teslajs');
+const log = require('electron-log');
 
 module.exports = {
     login: ({ username, password}) => {
@@ -17,10 +18,10 @@ module.exports = {
         const options = {
             authToken: authToken
         };
-
+        log.info('Hitting Tesla API on ' + new Date())
         tjs.vehicle(options, function (err, vehicle) {
             if (err) {
-                console.log(err)
+                log.error(err)
                 reject(err)
                 return
             }
@@ -40,7 +41,7 @@ module.exports = {
             };
             tjs.wakeUp(vehicleOptions, function (err, data) {
                 if (err) {
-                    console.log(err)
+                    log.error(err)
                     reject(err)
                 }
                 resolve(data)
@@ -55,6 +56,7 @@ module.exports = {
             };
             tjs.vehicleData(vehicleOptions, function (err, data) {
                 if (err) {
+                    log.error(err)
                     reject(err)
                 }
                 resolve(data)
@@ -69,7 +71,7 @@ module.exports = {
             };
             tjs.doorLock(vehicleOptions, function (err, data) {
                 if (err) {
-                    console.log(err)
+                    log.error(err)
                     reject(err)
                 }
                 resolve(data)
@@ -84,7 +86,7 @@ module.exports = {
             };
             tjs.doorUnlock(vehicleOptions, function (err, data) {
                 if (err) {
-                    console.log(err)
+                    log.error(err)
                     reject(err)
                 }
                 resolve(data)
@@ -99,7 +101,7 @@ module.exports = {
             };
             tjs.climateStart(vehicleOptions, function (err, data) {
                 if (err) {
-                    console.log(err)
+                    log.error(err)
                     reject(err)
                 }
                 resolve(data)
@@ -114,7 +116,7 @@ module.exports = {
             };
             tjs.climateStop(vehicleOptions, function (err, data) {
                 if (err) {
-                    console.log(err)
+                    log.error(err)
                     reject(err)
                 }
                 resolve(data)
@@ -129,7 +131,7 @@ module.exports = {
             };
             tjs.setSentryMode(vehicleOptions, onoff, function (err, done) {
                 if (err) {
-                    console.log(err)
+                    log.error(err)
                     reject(err)
                 }
                 resolve(done)
@@ -147,7 +149,7 @@ module.exports = {
                     resolve(done.result)
                     return
                 }
-                console.log(done.reason, err)
+                log.error(done.reason, err)
                 reject(done.reason)
             });
         })

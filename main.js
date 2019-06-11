@@ -121,7 +121,6 @@ function createWindow() {
     // get tesla Data
     let authToken;
     const getTeslaData = async (first) => {
-      log.info('Getting Tesla Data on ' + new Date())
       authToken = store.get('authToken')
 
       if ((mainWindow.isVisible() || first) && authToken) {
