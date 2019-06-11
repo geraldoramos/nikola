@@ -32,7 +32,7 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 300,
     height: 450,
-    show: process.platform === 'darwin' ? false : true,
+    show: true,
     frame: false,
     title: "Nikola",
     fullscreenable: false,
@@ -66,13 +66,11 @@ function createWindow() {
 
   // Don't show the app in the dock
   if (process.platform === 'darwin') {
-    app.dock.hide()
-      // hide window initially
-    mainWindow.hide()
+      app.dock.hide()
       // Main window behavior
-  mainWindow.on('blur', () => {
-    mainWindow.hide()
-  })
+      mainWindow.on('blur', () => {
+        mainWindow.hide()
+      })
   }
 
 
@@ -87,10 +85,18 @@ function createWindow() {
     e.preventDefault()
   });
 
+  const positioner = new Positioner(mainWindow)
+  let bounds = tray.getBounds()
 
-  // Tesla data Pooling
   mainWindow.webContents.on('did-finish-load', () => {
   autoUpdater.checkForUpdatesAndNotify();
+
+    if (process.platform === 'darwin') {
+      bounds = tray.getBounds()
+      positioner.move('trayCenter', bounds)
+      }
+
+    mainWindow.show()
 
     mainWindow.webContents.send('platform', process.platform)
 
@@ -284,13 +290,6 @@ function createWindow() {
   })
 
   // position window to the tray area
-
-  const positioner = new Positioner(mainWindow)
-  let bounds = tray.getBounds()
-
-  if (process.platform === 'darwin') {
-  positioner.move('trayCenter', bounds)
-  }
 
   tray.on('click', (event) => {
     if (process.platform === 'darwin') {
