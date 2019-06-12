@@ -89,7 +89,12 @@ function createWindow() {
   let bounds = tray.getBounds()
 
   mainWindow.webContents.on('did-finish-load', () => {
+
   autoUpdater.checkForUpdatesAndNotify();
+  
+  setInterval(() => {
+    autoUpdater.checkForUpdatesAndNotify();
+  }, 300000);
 
     if (process.platform === 'darwin') {
       bounds = tray.getBounds()
@@ -283,26 +288,24 @@ function createWindow() {
     }
 
     let firstshow = true
-    mainWindow.on('show', async() => {
+    mainWindow.on('show', async () => {
       if(firstshow){
         firstshow = false
         return
       }
-      await getTeslaData()
+      getTeslaData()
     })
 
   })
 
   // position window to the tray area
-
+  tray.setIgnoreDoubleClickEvents(true)
   tray.on('click', (event) => {
     if (process.platform === 'darwin') {
     bounds = tray.getBounds()
     positioner.move('trayCenter', bounds)
     }
-
     mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
-
   })
 
   // and load the index.html of the app.
