@@ -1,7 +1,7 @@
 'use strict';
-const {autoUpdater} = require("electron-updater");
+const { autoUpdater } = require("electron-updater");
 const log = require('electron-log');
-const { app, BrowserWindow, systemPreferences, Tray, ipcMain, shell } = require('electron');
+const { app, BrowserWindow, systemPreferences, Tray, ipcMain, shell} = require('electron');
 const path = require('path')
 const url = require('url')
 const Positioner = require('electron-positioner')
@@ -49,7 +49,7 @@ function createWindow() {
 
   // tray stuff
   let tray;
-  
+
   if (process.platform === 'darwin') {
     if (systemPreferences.isDarkMode()) {
       tray = new Tray(path.join(__dirname, 'src', 'assets', 'img', 'dark.png'))
@@ -60,28 +60,28 @@ function createWindow() {
   }
 
   if (process.platform !== 'darwin') {
-      tray = new Tray(path.join(__dirname, 'src', 'assets', 'img', 'win_tray.png'))
+    tray = new Tray(path.join(__dirname, 'src', 'assets', 'img', 'win_tray.png'))
   }
-  
+
 
   // Don't show the app in the dock
   if (process.platform === 'darwin') {
-      app.dock.hide()
-      // Main window behavior
-      mainWindow.on('blur', () => {
-        mainWindow.hide()
-      })
+    app.dock.hide()
+    // Main window behavior
+    mainWindow.on('blur', () => {
+      mainWindow.hide()
+    })
   }
 
 
   // Show detached devtools (for development)
-  if(dev && process.argv.indexOf('--noDevServer') === -1){
+  if (dev && process.argv.indexOf('--noDevServer') === -1) {
     mainWindow.openDevTools({
       mode: 'detach'
     })
   }
 
-  mainWindow.on('page-title-updated', function(e) {
+  mainWindow.on('page-title-updated', function (e) {
     e.preventDefault()
   });
 
@@ -90,16 +90,16 @@ function createWindow() {
 
   mainWindow.webContents.on('did-finish-load', () => {
 
-  autoUpdater.checkForUpdatesAndNotify();
-  
-  setInterval(() => {
     autoUpdater.checkForUpdatesAndNotify();
-  }, 300000);
+
+    setInterval(() => {
+      autoUpdater.checkForUpdatesAndNotify();
+    }, 300000);
 
     if (process.platform === 'darwin') {
       bounds = tray.getBounds()
       positioner.move('trayCenter', bounds)
-      }
+    }
 
     mainWindow.show()
 
@@ -108,7 +108,7 @@ function createWindow() {
     // start login and init sequence
     const startLogin = async (authToken, loginEmailPw) => {
       try {
-        if(!authToken){
+        if (!authToken) {
           authToken = await tesla.login(loginEmailPw)
           store.set('authToken', authToken)
         }
@@ -129,15 +129,31 @@ function createWindow() {
 
       if (mainWindow.isVisible() && authToken) {
         try {
-          const vehicle = await tesla.vehicle(authToken)
+          let vehicle;
+          try {
+            vehicle = await tesla.vehicle(authToken)
+          } catch (error) {
+            log.error(error)
+            store.delete('authToken')
+            store.delete('vehicleId')
+            poller ? poller.removeAllListeners() : null
+            mainWindow.webContents.send('login', false)
+            return
+          }
+
           store.set('vehicleId', vehicle.vehicleID)
-          if(vehicle.state !== 'online'){
+          if (vehicle.state !== 'online') {
             await tesla.wakeUp(authToken, vehicle.vehicleID)
-            mainWindow.webContents.send('tesla-data', {vehicle})
+            mainWindow.webContents.send('tesla-data', {
+              vehicle
+            })
             return
           }
           const vehicleData = await tesla.vehicleData(authToken, vehicle.vehicleID)
-          mainWindow.webContents.send('tesla-data', {model: vehicle.model, ...vehicleData})
+          mainWindow.webContents.send('tesla-data', {
+            model: vehicle.model,
+            ...vehicleData
+          })
           mainWindow.webContents.send('tesla-data-error', false)
         } catch (error) {
           log.error(error)
@@ -163,8 +179,8 @@ function createWindow() {
     }
 
     // Actions
- 
-     ipcMain.on('login-attempt', async (event, loginEmailPw) => {
+
+    ipcMain.on('login-attempt', async (event, loginEmailPw) => {
       startLogin(false, loginEmailPw)
     })
 
@@ -178,92 +194,93 @@ function createWindow() {
     ipcMain.on('door', async (event, action) => {
       mainWindow.webContents.send('action-loading', action)
       try {
-        if(action === 'door-unlock'){
+        if (action === 'door-unlock') {
           await tesla.unLockDoor(store.get('authToken'), store.get('vehicleId'))
-        } else{
+        } else {
           await tesla.lockDoor(store.get('authToken'), store.get('vehicleId'))
         }
         await wait(500)
         await getTeslaData()
-        
+
         mainWindow.webContents.send('action-loading', null)
       } catch (error) {
         log.error(error)
         mainWindow.webContents.send('action-error', `Error with ${action}`)
         mainWindow.webContents.send('action-loading', null)
-      }    
+      }
     })
 
     ipcMain.on('climate', async (event, action) => {
       mainWindow.webContents.send('action-loading', action)
       try {
-        if(action === 'climate-on'){
+        if (action === 'climate-on') {
           log.info('triggered climate start')
           await tesla.climateStart(store.get('authToken'), store.get('vehicleId'))
-        } else{
+        } else {
           log.info('triggering climate stop')
           await tesla.climateStop(store.get('authToken'), store.get('vehicleId'))
         }
         await wait(500)
         await getTeslaData()
-        
+
         mainWindow.webContents.send('action-loading', null)
       } catch (error) {
         log.error(error)
         mainWindow.webContents.send('action-error', `Error with ${action}`)
         mainWindow.webContents.send('action-loading', null)
-      }    
+      }
     })
 
     ipcMain.on('sentryMode', async (event, action) => {
       mainWindow.webContents.send('action-loading', action)
       try {
-        if(action === 'sentry-on'){
+        if (action === 'sentry-on') {
           log.info('triggering Sentry On')
           await tesla.setSentryMode(store.get('authToken'), store.get('vehicleId'), true)
-        } else{
+        } else {
           log.info('triggering Sentry Off')
           await tesla.setSentryMode(store.get('authToken'), store.get('vehicleId'), false)
         }
         await wait(500)
         await getTeslaData()
-        
+
         mainWindow.webContents.send('action-loading', null)
       } catch (error) {
         log.error(error)
         mainWindow.webContents.send('action-error', `Error with ${action}`)
         mainWindow.webContents.send('action-loading', null)
-      }    
+      }
     })
 
     ipcMain.on('climateTemp', async (event, temp) => {
       mainWindow.webContents.send('action-loading', 'climate-temp')
       try {
-          log.info('Changing temperature')
-          await tesla.setTemps(store.get('authToken'), store.get('vehicleId'), temp)
-          await wait(500)
-          await getTeslaData()
-          mainWindow.webContents.send('action-loading', null)
+        log.info('Changing temperature')
+        await tesla.setTemps(store.get('authToken'), store.get('vehicleId'), temp)
+        await wait(500)
+        await getTeslaData()
+        mainWindow.webContents.send('action-loading', null)
       } catch (error) {
         log.error(error)
         mainWindow.webContents.send('action-error', `Error with climate-temp`)
         mainWindow.webContents.send('action-loading', null)
-      }    
+      }
     })
 
 
     const setMenu = () => {
       contextMenu({
-        menu: actions => [
-          {
+        menu: actions => [{
             label: `Nikola ${app.getVersion()}`,
-            click(){shell.openExternal('https://github.com/geraldoramos/nikola')}
+            click() {
+              shell.openExternal('https://github.com/geraldoramos/nikola')
+            }
           },
           actions.separator(),
           {
             label: 'Logout',
             enabled: store.get('authToken') ? true : false,
-            click() { 
+            click() {
               store.delete('authToken')
               store.delete('vehicleId')
               poller ? poller.removeAllListeners() : null
@@ -273,7 +290,7 @@ function createWindow() {
           {
             label: 'Quit',
             accelerator: 'Command+Q',
-            click() { 
+            click() {
               app.quit()
             }
           }
@@ -289,7 +306,7 @@ function createWindow() {
 
     let firstshow = true
     mainWindow.on('show', async () => {
-      if(firstshow){
+      if (firstshow) {
         firstshow = false
         return
       }
@@ -302,8 +319,8 @@ function createWindow() {
   tray.setIgnoreDoubleClickEvents(true)
   tray.on('click', (event) => {
     if (process.platform === 'darwin') {
-    bounds = tray.getBounds()
-    positioner.move('trayCenter', bounds)
+      bounds = tray.getBounds()
+      positioner.move('trayCenter', bounds)
     }
     mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
   })
