@@ -11,7 +11,7 @@ export class MapContainer extends Component {
   
   render() {
     return (
-      <Map containerStyle={{position:'static'}} initialCenter={this.props.center} google={this.props.google} zoom={16} style={mapStyles}
+      <Map containerStyle={{position:'static'}} initialCenter={this.props.center} center={this.props.center} google={this.props.google} zoom={16} style={mapStyles}
       disableDefaultUI={true}
       styles={[
         {
@@ -182,6 +182,7 @@ export class MapContainer extends Component {
     ]}
       >
 <Marker
+position={this.props.center}
 icon={{
     url: 'https://firebasestorage.googleapis.com/v0/b/nikola-ffeaf.appspot.com/o/tesla-logo.png?alt=media&token=c0f9546d-6fa2-4523-aa2e-cf19fd8c72c1',
     anchor: new google.maps.Point(16,16),
