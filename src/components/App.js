@@ -1,7 +1,7 @@
 import modelImage from  './helpers/model-image'
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTemperatureLow, faTachometerAlt, faBed, faPowerOff } from '@fortawesome/free-solid-svg-icons'
+import { faTemperatureLow, faTachometerAlt, faBed, faPowerOff, faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons'
 import Maps from './Maps'
 const {ipcRenderer, remote} = window.require('electron')
 import Actions from './Actions'
@@ -10,6 +10,7 @@ import cToF from './helpers/c-to-f'
 import fToC from './helpers/f-to-c'
 import mToKm from './helpers/m-to-km'
 import Modal from './Modal'
+const { shell } = require('electron')
 
 class App extends React.Component {
   
@@ -23,6 +24,7 @@ class App extends React.Component {
     this.handleClimateTempClick = this.handleClimateTempClick.bind(this);
     this.handleClimateTempOk = this.handleClimateTempOk.bind(this);
     this.handleClimateTempCancel = this.handleClimateTempCancel.bind(this);
+    this.handleOpenMapClick = this.handleOpenMapClick.bind(this);
   }
 
   handleLockClick(event) {
@@ -39,6 +41,10 @@ class App extends React.Component {
 
   handleClimateTempClick(){
     this.setState({climateTempShowModal:true})
+  }
+
+  handleOpenMapClick(){
+    shell.openExternal(`https://www.google.com/maps/search/?api=1&query=${this.props.status.location.lat},${this.props.status.location.lng}`)
   }
 
   handleClimateTempOk(temp){
@@ -145,7 +151,7 @@ class App extends React.Component {
             </div>
             <hr/>
             <div className="location">
-            <div className="summary">Location</div>
+            <div className="summary">Location <a onClick={this.handleOpenMapClick}><FontAwesomeIcon title="Open in Google Maps" icon={faExternalLinkAlt} size="xs" color="rgb(124, 124, 124)"/></a></div>
             <Maps center={this.props.status.location} />
             </div>
       </div>

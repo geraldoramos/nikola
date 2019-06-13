@@ -151,7 +151,7 @@ export class MapContainer extends Component {
                     "color": "#000000"
                 },
                 {
-                    "lightness": 16
+                    "lightness": 14
                 }
             ]
         },
