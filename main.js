@@ -38,6 +38,7 @@ function createWindow() {
     fullscreenable: false,
     resizable: false,
     transparent: true,
+    titleBarStyle: 'customButtonsOnHover',
     webPreferences: {
       // Prevents renderer process code from not running when window is
       // hidden
@@ -68,7 +69,7 @@ function createWindow() {
     app.dock.hide()
     // Main window behavior
         mainWindow.on('blur', () => {
-          mainWindow.isVisible() ? mainWindow.hide() : null
+          mainWindow.hide()
         })
   }
 
