@@ -38,7 +38,6 @@ function createWindow() {
     fullscreenable: false,
     resizable: false,
     transparent: true,
-    titleBarStyle: 'customButtonsOnHover',
     webPreferences: {
       // Prevents renderer process code from not running when window is
       // hidden
@@ -68,9 +67,9 @@ function createWindow() {
   if (process.platform === 'darwin') {
     app.dock.hide()
     // Main window behavior
-    mainWindow.on('blur', () => {
-      mainWindow.hide()
-    })
+        mainWindow.on('blur', () => {
+          mainWindow.isVisible() ? mainWindow.hide() : null
+        })
   }
 
 
@@ -80,10 +79,6 @@ function createWindow() {
       mode: 'detach'
     })
   }
-
-  mainWindow.on('page-title-updated', function (e) {
-    e.preventDefault()
-  });
 
   const positioner = new Positioner(mainWindow)
   let bounds = tray.getBounds()
@@ -101,10 +96,8 @@ function createWindow() {
       positioner.move('trayCenter', bounds)
     }
 
-    mainWindow.show()
-
     mainWindow.webContents.send('platform', process.platform)
-
+    mainWindow.show()
     // start login and init sequence
     const startLogin = async (authToken, loginEmailPw) => {
       try {
@@ -318,6 +311,7 @@ function createWindow() {
   // position window to the tray area
   tray.setIgnoreDoubleClickEvents(true)
   tray.on('click', (event) => {
+    log.info('click tray event')
     if (process.platform === 'darwin') {
       bounds = tray.getBounds()
       positioner.move('trayCenter', bounds)
@@ -345,7 +339,7 @@ function createWindow() {
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
-
+    log.info('window closed event')
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
@@ -360,6 +354,7 @@ app.on('ready', createWindow);
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
+  log.info('window-all-closed event')
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
@@ -368,6 +363,7 @@ app.on('window-all-closed', () => {
 });
 
 app.on('activate', () => {
+  log.info('app on activate event')
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
