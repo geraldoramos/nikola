@@ -125,7 +125,7 @@ class Home extends React.Component {
           <div className="pane">
           <div className="container-sleep">
             <div className="exclamation"><FontAwesomeIcon icon={faWifi} size="3x" color="#cc0001"/></div>
-          <div className="summary">No internet Connection</div>
+          <div className="summary">No Internet Connection</div>
           <div className="signal"/>
           </div>
         </div>
