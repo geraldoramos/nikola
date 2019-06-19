@@ -2,8 +2,9 @@ import '../assets/css/Photon.css';
 import '../assets/css/App.css';
 import React, { Component } from 'react';
 const {ipcRenderer, remote} = window.require('electron')
-
 import batteryLevelIcon from './helpers/battery-level-icon'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faWifi } from '@fortawesome/free-solid-svg-icons'
 import App from './App';
 import Login from './Login';
 
@@ -18,11 +19,21 @@ class Home extends React.Component {
           error: false,
           actionError: null,
           auth:false,
-          
+          online: true,
         }
+        this.alertOnlineStatus = this.alertOnlineStatus.bind(this);
+      }
+
+      alertOnlineStatus() {
+        this.setState({online:navigator.onLine})
       }
 
       componentDidMount() {
+      
+        window.addEventListener('online',  this.alertOnlineStatus)
+        window.addEventListener('offline',  this.alertOnlineStatus)
+      
+        this.alertOnlineStatus()
 
         ipcRenderer.once('platform', function (event, platform) {
           if(platform!=='darwin'){
@@ -98,9 +109,30 @@ class Home extends React.Component {
 
       componentWillUnmount(){
         ipcRenderer.removeAllListeners()
+        window.removeEventListener('online',  this.alertOnlineStatus)
+        window.removeEventListener('offline',  this.alertOnlineStatus)
       }
 
   render() {
+
+    if(!this.state.online){
+      return (
+        <div>
+        <div className="header-arrow"></div>
+        <div className="window">
+        <header className="toolbar toolbar-header"/>
+        <div className="window-content">
+          <div className="pane">
+          <div className="container-sleep">
+            <div className="exclamation"><FontAwesomeIcon icon={faWifi} size="3x" color="#cc0001"/></div>
+          <div className="summary">No internet Connection</div>
+          <div className="signal"/>
+          </div>
+        </div>
+        </div>
+          </div>
+          </div>
+    )}
 
     if(!this.state.auth){
       return (
