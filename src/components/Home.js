@@ -80,7 +80,7 @@ class Home extends React.Component {
               model: store.model,
               state: store.state,
               temperatureUnits: store.gui_settings? store.gui_settings.gui_temperature_units : null,
-              distanceUnits: store.gui_settings? store.gui_settings.gui_distance_units : null,
+              distanceUnits: store.gui_settings? store.gui_settings.gui_distance_units : '',
               chargeRateUnits: store.gui_settings? store.gui_settings.gui_charge_rate_units : null
 
             },
