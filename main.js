@@ -172,6 +172,11 @@ function createWindow() {
       }
     }
 
+    // Error in Renderer
+    ipcMain.on('errorInWindow', async (event, error) => {
+      log.error('Window error', error)
+    })
+
     // Actions
 
     ipcMain.on('login-attempt', async (event, loginEmailPw) => {

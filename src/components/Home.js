@@ -30,6 +30,10 @@ class Home extends React.Component {
 
       componentDidMount() {
       
+        window.onerror = function(error, url, line) {
+          ipcRenderer.send('errorInWindow', error);
+        };
+
         window.addEventListener('online',  this.alertOnlineStatus)
         window.addEventListener('offline',  this.alertOnlineStatus)
       
