@@ -9,6 +9,7 @@
     "url": "https://github.com/geraldoramos/nikola.git"
   },
   "build": {
+    "generateUpdatesFilesForAllChannels": true,
     "directories": {
       "output": "packaged"
     },

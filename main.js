@@ -1,7 +1,7 @@
 'use strict';
 const { autoUpdater } = require("electron-updater");
 const log = require('electron-log');
-const { app, BrowserWindow, systemPreferences, Tray, ipcMain, shell} = require('electron');
+const { app, BrowserWindow, systemPreferences, Tray, ipcMain, shell, dialog} = require('electron');
 const path = require('path')
 const url = require('url')
 const Positioner = require('electron-positioner')
@@ -16,6 +16,7 @@ autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 log.info('Nikola App starting...');
 
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
@@ -27,6 +28,7 @@ if (process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) |
 }
 
 function createWindow() {
+
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -86,11 +88,29 @@ function createWindow() {
 
   mainWindow.webContents.on('did-finish-load', () => {
 
-    autoUpdater.checkForUpdatesAndNotify();
+    if(store.get('betaReleases')){
+      autoUpdater.channel = "beta"
+    }
+
+    autoUpdater.checkForUpdates();
 
     setInterval(() => {
-      autoUpdater.checkForUpdatesAndNotify();
+      if(store.get('betaReleases')){
+        autoUpdater.channel = "beta"
+      }
+      autoUpdater.checkForUpdates()
     }, 300000);
+
+    const dialogOptions = {type: 'info', buttons: ['Restart and install', 'Not now'], message: 'A new Nikola version has been downloaded!'}
+
+      autoUpdater.on('update-downloaded', (info) => {
+        dialog.showMessageBox(dialogOptions, i => i === 0 ? autoUpdater.quitAndInstall() : null) 
+      })
+
+      autoUpdater.on('error', (err) => {
+        log.error(err)
+      })
+
 
     if (process.platform === 'darwin') {
       bounds = tray.getBounds()
@@ -273,6 +293,18 @@ function createWindow() {
             label: `Nikola ${app.getVersion()}`,
             click() {
               shell.openExternal('https://github.com/geraldoramos/nikola')
+            }
+          },
+          {
+            label: 'Enable Beta Releases',
+            type: 'checkbox',
+            checked: store.get('betaReleases'),
+            click: function (item) {
+              if(store.get('betaReleases')){
+                store.set('betaReleases', false)
+                return
+              }
+              store.set('betaReleases', true)
             }
           },
           actions.separator(),
