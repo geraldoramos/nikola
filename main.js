@@ -206,12 +206,11 @@ function createWindow() {
     })
 
     // Actions
-
     ipcMain.on('login-attempt', async (event, loginEmailPw) => {
       startLogin(false, loginEmailPw)
     })
 
-    // wait function
+    // wait helper function
     async function wait(ms) {
       return new Promise(resolve => {
         setTimeout(resolve, ms)
