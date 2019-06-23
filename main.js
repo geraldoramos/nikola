@@ -137,10 +137,10 @@ function createWindow() {
 
           store.set('vehicleId', vehicle.vehicleID)
           if (vehicle.state !== 'online') {
-            await tesla.wakeUp(authToken, vehicle.vehicleID)
             mainWindow.webContents.send('tesla-data', {
-              vehicle
+              ...vehicle
             })
+            await tesla.wakeUp(authToken, vehicle.vehicleID)
             return
           }
           const vehicleData = await tesla.vehicleData(authToken, vehicle.vehicleID)

@@ -5,6 +5,10 @@ import modelx from '../../assets/img/modelx.png'
 
 export default (model) =>{
     let img;
+    if(!model){
+      img = model3
+      return img
+    }
     model = model.toLowerCase()
     switch (true) {
       case (model === 'model 3'):
