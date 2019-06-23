@@ -23,6 +23,7 @@ const isDev = require('electron-is-dev')
 // Logging
 autoUpdater.logger = log
 autoUpdater.logger.transports.file.level = 'info'
+autoUpdater.allowPrerelease = store.get('betaReleases')
 log.info('Nikola App starting...')
 
 // Keep a global reference of the window object
@@ -86,17 +87,14 @@ function createWindow() {
   mainWindow.webContents.on('did-finish-load', () => {
     // Auto update features
     if (!isDev) {
-      store.get('betaReleases')
-        ? (autoUpdater.channel = 'beta')
-        : (autoUpdater.channel = 'latest')
       autoUpdater.checkForUpdates()
     }
 
     setInterval(() => {
       if (!isDev) {
         store.get('betaReleases')
-          ? (autoUpdater.channel = 'beta')
-          : (autoUpdater.channel = 'latest')
+          ? (autoUpdater.allowPrerelease = true)
+          : (autoUpdater.allowPrerelease = false)
         autoUpdater.checkForUpdates()
       }
     }, 300000)
