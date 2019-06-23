@@ -1,56 +1,53 @@
-'use strict';
-const { autoUpdater } = require("electron-updater");
-const log = require('electron-log');
-const { app, BrowserWindow, systemPreferences, Tray, ipcMain, shell, dialog} = require('electron');
+'use strict'
+const { autoUpdater } = require('electron-updater')
+const log = require('electron-log')
+const {
+  app,
+  BrowserWindow,
+  systemPreferences,
+  Tray,
+  ipcMain,
+  shell,
+  dialog
+} = require('electron')
 const path = require('path')
 const url = require('url')
 const Positioner = require('electron-positioner')
 const tesla = require('./tesla-api')
-const Store = require('electron-store');
-const store = new Store();
-const Poller = require('./poller');
-const contextMenu = require('electron-context-menu');
+const Store = require('electron-store')
+const store = new Store()
+const Poller = require('./poller')
+const contextMenu = require('electron-context-menu')
+const isDev = require('electron-is-dev')
 
 // Logging
-autoUpdater.logger = log;
-autoUpdater.logger.transports.file.level = 'info';
-log.info('Nikola App starting...');
+autoUpdater.logger = log
+autoUpdater.logger.transports.file.level = 'info'
+log.info('Nikola App starting...')
 
-
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let mainWindow;
-
-// Keep a reference for dev mode
-let dev = false;
-if (process.defaultApp || /[\\/]electron-prebuilt[\\/]/.test(process.execPath) || /[\\/]electron[\\/]/.test(process.execPath)) {
-  dev = true;
-}
+// Keep a global reference of the window object
+let mainWindow
 
 function createWindow() {
-
-
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 300,
     height: 450,
     show: true,
     frame: false,
-    title: "Nikola",
+    title: 'Nikola',
     fullscreenable: false,
     resizable: false,
     transparent: true,
     titleBarStyle: 'customButtonsOnHover',
     webPreferences: {
-      // Prevents renderer process code from not running when window is
-      // hidden
       backgroundThrottling: false,
-      nodeIntegration: true,
+      nodeIntegration: true
     }
   })
 
   // tray stuff
-  let tray;
+  let tray
 
   if (process.platform === 'darwin') {
     if (systemPreferences.isDarkMode()) {
@@ -62,22 +59,22 @@ function createWindow() {
   }
 
   if (process.platform !== 'darwin') {
-    tray = new Tray(path.join(__dirname, 'src', 'assets', 'img', 'win_tray.png'))
+    tray = new Tray(
+      path.join(__dirname, 'src', 'assets', 'img', 'win_tray.png')
+    )
   }
 
-
-  // Don't show the app in the dock
+  // Don't show the app in the dock (OSX)
   if (process.platform === 'darwin') {
     app.dock.hide()
     // Main window behavior
-        mainWindow.on('blur', () => {
-          mainWindow.hide()
-        })
+    mainWindow.on('blur', () => {
+      mainWindow.hide()
+    })
   }
 
-
   // Show detached devtools (for development)
-  if (dev && process.argv.indexOf('--noDevServer') === -1) {
+  if (isDev) {
     mainWindow.openDevTools({
       mode: 'detach'
     })
@@ -87,30 +84,38 @@ function createWindow() {
   let bounds = tray.getBounds()
 
   mainWindow.webContents.on('did-finish-load', () => {
-
-    if(store.get('betaReleases')){
-      autoUpdater.channel = "beta"
+    // Auto update features
+    if (!isDev) {
+      store.get('betaReleases')
+        ? (autoUpdater.channel = 'beta')
+        : (autoUpdater.channel = 'latest')
+      autoUpdater.checkForUpdates()
     }
 
-    autoUpdater.checkForUpdates();
-
     setInterval(() => {
-      if(store.get('betaReleases')){
-        autoUpdater.channel = "beta"
+      if (!isDev) {
+        store.get('betaReleases')
+          ? (autoUpdater.channel = 'beta')
+          : (autoUpdater.channel = 'latest')
+        autoUpdater.checkForUpdates()
       }
-      autoUpdater.checkForUpdates()
-    }, 300000);
+    }, 300000)
 
-    const dialogOptions = {type: 'info', buttons: ['Restart and install', 'Not now'], message: 'A new Nikola version has been downloaded!'}
+    const dialogOptions = {
+      type: 'info',
+      buttons: ['Restart and install', 'Not now'],
+      message: 'A new Nikola version has been downloaded!'
+    }
 
-      autoUpdater.on('update-downloaded', (info) => {
-        dialog.showMessageBox(dialogOptions, i => i === 0 ? autoUpdater.quitAndInstall() : null) 
-      })
+    autoUpdater.on('update-downloaded', info => {
+      dialog.showMessageBox(dialogOptions, i =>
+        i === 0 ? autoUpdater.quitAndInstall() : null
+      )
+    })
 
-      autoUpdater.on('error', (err) => {
-        log.error(err)
-      })
-
+    autoUpdater.on('error', err => {
+      log.error(err)
+    })
 
     if (process.platform === 'darwin') {
       bounds = tray.getBounds()
@@ -137,13 +142,13 @@ function createWindow() {
     }
 
     // get tesla Data
-    let authToken;
+    let authToken
     const getTeslaData = async () => {
       authToken = store.get('authToken')
 
       if (mainWindow.isVisible() && authToken) {
         try {
-          let vehicle;
+          let vehicle
           try {
             vehicle = await tesla.vehicle(authToken)
           } catch (error) {
@@ -163,7 +168,10 @@ function createWindow() {
             await tesla.wakeUp(authToken, vehicle.vehicleID)
             return
           }
-          const vehicleData = await tesla.vehicleData(authToken, vehicle.vehicleID)
+          const vehicleData = await tesla.vehicleData(
+            authToken,
+            vehicle.vehicleID
+          )
           mainWindow.webContents.send('tesla-data', {
             model: vehicle.model,
             ...vehicleData
@@ -177,18 +185,18 @@ function createWindow() {
     }
 
     // Polling function
-    let poller;
+    let poller
     const startPoller = () => {
       // Set 10s timeout between polls
-      poller = new Poller(10000);
+      poller = new Poller(10000)
       // Wait till the timeout sent our event to the EventEmitter
       poller.onPoll(async () => {
         await getTeslaData()
-        poller.poll();
-      });
+        poller.poll()
+      })
       // Initial start
       if (store.get('authToken')) {
-        poller.poll();
+        poller.poll()
       }
     }
 
@@ -206,8 +214,8 @@ function createWindow() {
     // wait function
     async function wait(ms) {
       return new Promise(resolve => {
-        setTimeout(resolve, ms);
-      });
+        setTimeout(resolve, ms)
+      })
     }
 
     ipcMain.on('door', async (event, action) => {
@@ -234,10 +242,16 @@ function createWindow() {
       try {
         if (action === 'climate-on') {
           log.info('triggered climate start')
-          await tesla.climateStart(store.get('authToken'), store.get('vehicleId'))
+          await tesla.climateStart(
+            store.get('authToken'),
+            store.get('vehicleId')
+          )
         } else {
           log.info('triggering climate stop')
-          await tesla.climateStop(store.get('authToken'), store.get('vehicleId'))
+          await tesla.climateStop(
+            store.get('authToken'),
+            store.get('vehicleId')
+          )
         }
         await wait(500)
         await getTeslaData()
@@ -255,10 +269,18 @@ function createWindow() {
       try {
         if (action === 'sentry-on') {
           log.info('triggering Sentry On')
-          await tesla.setSentryMode(store.get('authToken'), store.get('vehicleId'), true)
+          await tesla.setSentryMode(
+            store.get('authToken'),
+            store.get('vehicleId'),
+            true
+          )
         } else {
           log.info('triggering Sentry Off')
-          await tesla.setSentryMode(store.get('authToken'), store.get('vehicleId'), false)
+          await tesla.setSentryMode(
+            store.get('authToken'),
+            store.get('vehicleId'),
+            false
+          )
         }
         await wait(500)
         await getTeslaData()
@@ -275,7 +297,11 @@ function createWindow() {
       mainWindow.webContents.send('action-loading', 'climate-temp')
       try {
         log.info('Changing temperature')
-        await tesla.setTemps(store.get('authToken'), store.get('vehicleId'), temp)
+        await tesla.setTemps(
+          store.get('authToken'),
+          store.get('vehicleId'),
+          temp
+        )
         await wait(500)
         await getTeslaData()
         mainWindow.webContents.send('action-loading', null)
@@ -286,10 +312,10 @@ function createWindow() {
       }
     })
 
-
     const setMenu = () => {
       contextMenu({
-        menu: actions => [{
+        menu: actions => [
+          {
             label: `Nikola ${app.getVersion()}`,
             click() {
               shell.openExternal('https://github.com/geraldoramos/nikola')
@@ -299,8 +325,8 @@ function createWindow() {
             label: 'Enable Beta Releases',
             type: 'checkbox',
             checked: store.get('betaReleases'),
-            click: function (item) {
-              if(store.get('betaReleases')){
+            click: function(item) {
+              if (store.get('betaReleases')) {
                 store.set('betaReleases', false)
                 return
               }
@@ -326,7 +352,7 @@ function createWindow() {
             }
           }
         ]
-      });
+      })
     }
     setMenu()
 
@@ -343,12 +369,11 @@ function createWindow() {
       }
       getTeslaData()
     })
-
   })
 
   // position window to the tray area
   tray.setIgnoreDoubleClickEvents(true)
-  tray.on('click', (event) => {
+  tray.on('click', event => {
     log.info('click tray event')
     if (process.platform === 'darwin') {
       bounds = tray.getBounds()
@@ -358,53 +383,41 @@ function createWindow() {
   })
 
   // and load the index.html of the app.
-  let indexPath;
-  if (dev && process.argv.indexOf('--noDevServer') === -1) {
+  let indexPath
+  if (isDev) {
     indexPath = url.format({
       protocol: 'http:',
       host: 'localhost:8080',
       pathname: 'index.html',
       slashes: true
-    });
+    })
   } else {
     indexPath = url.format({
       protocol: 'file:',
       pathname: path.join(__dirname, 'dist', 'index.html'),
       slashes: true
-    });
+    })
   }
-  mainWindow.loadURL(indexPath);
+  mainWindow.loadURL(indexPath)
 
-  // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
+  mainWindow.on('closed', function() {
     log.info('window closed event')
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null;
-  });
+    mainWindow = null
+  })
 }
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on('ready', createWindow)
 
-// Quit when all windows are closed.
 app.on('window-all-closed', () => {
   log.info('window-all-closed event')
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
-    app.quit();
+    app.quit()
   }
-});
+})
 
 app.on('activate', () => {
   log.info('app on activate event')
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
   if (mainWindow === null) {
-    createWindow();
+    createWindow()
   }
 })

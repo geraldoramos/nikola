@@ -89,6 +89,7 @@
   "dependencies": {
     "antd": "^3.19.2",
     "electron-context-menu": "^0.12.1",
+    "electron-is-dev": "^1.1.0",
     "electron-log": "^3.0.6",
     "electron-positioner": "^4.1.0",
     "electron-store": "^3.2.0",
