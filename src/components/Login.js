@@ -65,6 +65,7 @@ class Login extends React.Component {
               onChange={this.handleChange}
               className="form-control"
               placeholder="Enter email"
+              autofocus={true}
             />
           </div>
           <div className="form-group">
