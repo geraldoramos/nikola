@@ -141,14 +141,17 @@ function createWindow() {
 
     // get tesla Data
     let authToken
-    const getTeslaData = async () => {
+    const getTeslaData = async (vehicleIdx) => {
       authToken = store.get('authToken')
+      if (typeof vehicleIdx !== 'number') vehicleIdx = store.get('vehicleIdx') || 0
 
       if (mainWindow.isVisible() && authToken) {
         try {
           let vehicle
           try {
-            vehicle = await tesla.vehicle(authToken)
+            const vehicles = await tesla.vehicles(authToken)
+            vehicleIdx = (vehicleIdx % vehicles.length) || 0
+            vehicle = vehicles[vehicleIdx]
           } catch (error) {
             log.error(error)
             store.delete('authToken')
@@ -159,8 +162,10 @@ function createWindow() {
           }
 
           store.set('vehicleId', vehicle.vehicleID)
+          store.set('vehicleIdx', vehicleIdx)
           if (vehicle.state !== 'online') {
             mainWindow.webContents.send('tesla-data', {
+              vehicleIdx,
               ...vehicle
             })
             await tesla.wakeUp(authToken, vehicle.vehicleID)
@@ -172,6 +177,7 @@ function createWindow() {
           )
           mainWindow.webContents.send('tesla-data', {
             model: vehicle.model,
+            vehicleIdx,
             ...vehicleData
           })
           mainWindow.webContents.send('tesla-data-error', false)
@@ -208,6 +214,10 @@ function createWindow() {
       startLogin(false, loginEmailPw)
     })
 
+    ipcMain.on('switch-vehicle', async (event, vehicleIdx) => {
+      getTeslaData(vehicleIdx)
+    })
+
     // wait helper function
     async function wait(ms) {
       return new Promise(resolve => {
@@ -219,7 +229,7 @@ function createWindow() {
       mainWindow.webContents.send('action-loading', action)
       try {
         if (action === 'door-unlock') {
-          await tesla.unLockDoor(store.get('authToken'), store.get('vehicleId'))
+          await tesla.unlockDoor(store.get('authToken'), store.get('vehicleId'))
         } else {
           await tesla.lockDoor(store.get('authToken'), store.get('vehicleId'))
         }
@@ -359,12 +369,16 @@ function createWindow() {
     }
 
     let firstshow = true
+    let loading = false // lock to ensure we don't load more than we ought to
     mainWindow.on('show', async () => {
       if (firstshow) {
         firstshow = false
         return
       }
-      getTeslaData()
+      if (loading) return
+      loading = true
+      await getTeslaData()
+      loading = false
     })
   })
 

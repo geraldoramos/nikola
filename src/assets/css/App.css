@@ -42,6 +42,27 @@ body {
   border-top-right-radius: var(--window-border-radius);
 }
 
+.car-picker > svg {
+  position: absolute;
+  top: 5px;
+}
+
+.car-picker > svg:hover {
+  color: #bbbbff;
+}
+
+.car-picker > svg:active {
+  color: #ffffbb;
+}
+
+.car-picker .car-left {
+  left: 2px;
+}
+
+.car-picker .car-right {
+  right: 2px;
+}
+
 .window-content {
   background-color: var(--background-color);
 }
