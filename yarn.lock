@@ -6958,10 +6958,10 @@ terser@^4.0.0:
     source-map "~0.6.1"
     source-map-support "~0.5.10"
 
-teslajs@^4.3.9:
-  version "4.3.10"
-  resolved "https://registry.yarnpkg.com/teslajs/-/teslajs-4.3.10.tgz#9e030f3a3558a02a1ad5cca2f7d4abb531950b25"
-  integrity sha512-lPuuzOsdXF/9Y3AvujV2whfXkWPR3NeR5AkoYdgrX3VP+lsVqNh+LwtCoYhWtseXEEHpagSbU6ntXKq+gf6Bbw==
+teslajs@^4.7.4:
+  version "4.7.4"
+  resolved "https://registry.yarnpkg.com/teslajs/-/teslajs-4.7.4.tgz#49ab09f17808ddbfd218845b0d89954e338b532e"
+  integrity sha512-mkQ6YfsuotPilrXQ+/J2hSWeXdFP27q2cpWsyzk1Jfk6aYCDPWFpmu+aEJoK8ulsDN9BiMHZXPGxbqzrlaA0IA==
   dependencies:
     promise "^8.0.1"
     request "^2.81.0"
