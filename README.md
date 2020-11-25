@@ -1,3 +1,4 @@
+# I'm not maintaining this project anymore, if anyone wants to become a maintainer, please reach out!
 <p align="center">
   <img src="https://firebasestorage.googleapis.com/v0/b/nikola-ffeaf.appspot.com/o/logonovo.svg?alt=media&token=0370731f-6240-41bb-bb30-db1db4947655" height="80"><br><br>
   <a href="https://github.com/geraldoramos/nikola/issues"><img src=https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat></a> <a href="https://github.com/geraldoramos/nikola/releases/latest"><img src=https://img.shields.io/github/downloads/geraldoramos/nikola/total.svg?style=flat></a>
