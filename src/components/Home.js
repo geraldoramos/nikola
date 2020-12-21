@@ -4,7 +4,11 @@ import React, { Component } from 'react'
 const { ipcRenderer, remote } = window.require('electron')
 import batteryLevelIcon from './helpers/battery-level-icon'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faWifi } from '@fortawesome/free-solid-svg-icons'
+import { 
+  faWifi,
+  faChevronCircleLeft,
+  faChevronCircleRight
+} from '@fortawesome/free-solid-svg-icons'
 import App from './App'
 import Login from './Login'
 
@@ -21,6 +25,8 @@ class Home extends React.Component {
       online: true
     }
     this.alertOnlineStatus = this.alertOnlineStatus.bind(this)
+    this.handleVehicleIdxDec = this.handleVehicleIdxDec.bind(this)
+    this.handleVehicleIdxInc = this.handleVehicleIdxInc.bind(this)
   }
 
   alertOnlineStatus() {
@@ -106,6 +112,7 @@ class Home extends React.Component {
               ? store.gui_settings.gui_charge_rate_units
               : null
           },
+          vehicleIdx: store.vehicleIdx,
           status: {
             driverTempSetting: store.climate_state
               ? store.climate_state.driver_temp_setting
@@ -163,6 +170,14 @@ class Home extends React.Component {
     window.removeEventListener('offline', this.alertOnlineStatus)
   }
 
+  handleVehicleIdxDec() {
+    ipcRenderer.send('switch-vehicle', this.state.vehicleIdx - 1)
+  }
+
+  handleVehicleIdxInc() {
+    ipcRenderer.send('switch-vehicle', this.state.vehicleIdx + 1)
+  }
+
   render() {
     if (!this.state.online) {
       return (
@@ -209,6 +224,22 @@ class Home extends React.Component {
           <header className="toolbar toolbar-header" />
           <div className="window-content">
             <div className="pane">
+              <div className="car-picker">
+                <FontAwesomeIcon 
+                  icon={faChevronCircleLeft}
+                  className="car-left"
+                  size="2x" 
+                  color="#ffffff" 
+                  onClick={this.handleVehicleIdxDec}
+                />
+                <FontAwesomeIcon 
+                  icon={faChevronCircleRight} 
+                  className="car-right"
+                  size="2x" 
+                  color="#ffffff" 
+                  onClick={this.handleVehicleIdxInc} 
+                />
+              </div>
               <App {...this.state} />
             </div>
           </div>

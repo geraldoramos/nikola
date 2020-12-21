@@ -13,11 +13,13 @@
     "directories": {
       "output": "packaged"
     },
-    "publish": [{
-      "provider": "github",
-      "owner": "geraldoramos",
-      "repo": "nikola"
-    }],
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "geraldoramos",
+        "repo": "nikola"
+      }
+    ],
     "appId": "com.github.geraldoramos.nikola",
     "mac": {
       "category": "public.app-category.utilities",
@@ -94,6 +96,6 @@
     "electron-updater": "^4.0.6",
     "google-maps-react": "^2.0.2",
     "react-tooltip": "^3.10.0",
-    "teslajs": "^4.3.9"
+    "teslajs": "^4.7.4"
   }
 }
